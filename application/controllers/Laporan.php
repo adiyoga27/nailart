@@ -117,7 +117,7 @@ class Laporan extends CI_Controller {
 						
 						$pdf = new Spipu\Html2Pdf\Html2Pdf('P','A4','en');
 						$pdf->WriteHTML($html);
-						$pdf->Output('Laporan Arus Kas.pdf', 'D');
+						$pdf->Output('Laporan Jurnal Umum.pdf', 'D');
 
 					}else{
 

@@ -46,9 +46,10 @@
 
                   </tr>
               <?php 
-
-              $debit += $row->kategori_akun == 'aset' ? $row->kredit_ : $row->debit_; 
-              $kredit+= $row->kategori_akun == 'aset' ? $row->debit_ : $row->kredit_;
+            $debit += $value['debit'];
+            $kredit += $value['kredit'];
+            //   $debit += $row['kategori_akun'] == 'aset' ? $row['kredit_'] : $row['debit_']; 
+            //   $kredit += $row['kategori_akun'] == 'aset' ? $row['debit_'] : $row['kredit_'];
               } ?>
               <tr style="background:#e0e0e0 !important; font-weight:bold; width:100% !important">
                 <th colspan="4">Total</th>

@@ -5,7 +5,7 @@
     <section class="col-lg-4 connectedSortable">
       <div class="box box-danger">
         <div class="box-body text-center">
-          <h1>Pemasukan<br> Rp. <?=number_format($this->db->query(" SELECT SUM(kredit) as kredit_ FROM tb_jurnal ")->row()->kredit_);?> </h1>
+          <h1>Pemasukan<br> Rp. <?=number_format($this->db->query(" SELECT SUM(kredit) as kredit_ FROM tb_jurnal where month(tanggal) = '".date('m')."' and year(tanggal) = '".date('Y')."'")->row()->kredit_);?> </h1>
           
         </div>
       </div>
@@ -14,7 +14,7 @@
     <section class="col-lg-4 connectedSortable">
       <div class="box box-danger">
         <div class="box-body text-center">
-          <h1>Pengeluaran<br> Rp. <?=number_format($this->db->query(" SELECT SUM(debit) as debit_ FROM tb_jurnal ")->row()->debit_);?> </h1>
+          <h1>Pengeluaran<br> Rp. <?=number_format($this->db->query(" SELECT SUM(debit) as debit_ FROM tb_jurnal where month(tanggal) = '".date('m')."' and year(tanggal) = '".date('Y')."'")->row()->debit_);?> </h1>
           
         </div>
       </div>
@@ -23,7 +23,7 @@
     <section class="col-lg-4 connectedSortable">
       <div class="box box-danger">
         <div class="box-body text-center">
-          <h1>Saldo<br> Rp. <?=number_format($this->db->query(" SELECT SUM(kredit) - SUM(debit) as totals_ FROM tb_jurnal ")->row()->totals_);?> </h1>
+          <h1>Saldo<br> Rp. <?=number_format($this->db->query(" SELECT SUM(kredit) - SUM(debit) as totals_ FROM tb_jurnal where month(tanggal) = '".date('m')."' and year(tanggal) = '".date('Y')."'")->row()->totals_);?> </h1>
           
         </div>
       </div>

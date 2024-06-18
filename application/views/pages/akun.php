@@ -26,15 +26,15 @@
               <?php $no = 1; foreach ($data as $row) { ?>
               <tr>
                 <td><?=$no++?></td>
-                <td style="text-align: left"><?=ucwords(str_replace('_', ' ',$row->tipe_akun) )?></td>
-                <td style="text-align: left"><?=ucwords($row->kategori_akun)?></td>
-                <td><?=$row->kode_akun?></td>
-                <td style="text-align: left"><?=$row->nama_akun?></td>
-                <td style="text-align: left">Rp0</td>
+                <td style="text-align: left"><?=ucwords(str_replace('_', ' ',$row['tipe_akun']) )?></td>
+                <td style="text-align: left"><?=ucwords($row['kategori_akun'])?></td>
+                <td><?=$row['kode_akun']?></td>
+                <td style="text-align: left"><?=$row['nama_akun']?></td>
+                <td style="text-align: left">Rp<?=number_format($row['saldo'],0,',','.')?></td>
                 
                 <td>
-                  <a href="<?=base_url('akun/edit/'.$row->id_akun)?>" class="btn btn-info btn-sm"><span class="fa fa-edit"></span></a>
-                  <a onclick="return confirm('apakah anda yakin ingin menghapus data tersebut ?')" href="<?=base_url('akun/delete/'.$row->id_akun)?>" class="btn btn-danger btn-sm"><span class="fa fa-trash"></span></a>
+                  <a href="<?=base_url('akun/edit/'.$row['id_akun'])?>" class="btn btn-info btn-sm"><span class="fa fa-edit"></span></a>
+                  <a onclick="return confirm('apakah anda yakin ingin menghapus data tersebut ?')" href="<?=base_url('akun/delete/'.$row['id_akun'])?>" class="btn btn-danger btn-sm"><span class="fa fa-trash"></span></a>
                 </td>
               </tr>
               <?php } ?>

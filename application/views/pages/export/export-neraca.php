@@ -37,10 +37,10 @@
               $kredit= 0;
               $no = 1; foreach ($data as $row) {?>
               <tr>
-                <td style="text-align: center; width: 20px;"><col width="210"><?=$no++?></td>
-                <td style=" text-align: left"><?=$row->nama_akun?></td>
-                <td style="width: 100px; text-align: right">Rp. <?=number_format($row->kategori_akun == 'aset' ? $row->kredit_ : $row->debit_)?></td>
-                <td style="width: 100px; text-align: right">Rp. <?=number_format($row->kategori_akun == 'aset' ? $row->debit_ : $row->kredit_) ?></td>
+                <td  style="width:5px; text-align: center; "><?=$no++?></td>
+                <td  style="width:300px; text-align: left"><?=$row->nama_akun?></td>
+                <td  style="width:120px; text-align: right">Rp. <?=number_format($row->kategori_akun == 'aset' ? $row->kredit_ : $row->debit_)?></td>
+                <td  style="width:120px; text-align: right">Rp. <?=number_format($row->kategori_akun == 'aset' ? $row->debit_ : $row->kredit_) ?></td>
               </tr>
               <?php 
 
@@ -52,6 +52,43 @@
                 <th style="text-align: right">Rp. <?=number_format($debit) ?></th>
                 <th style="text-align: right">Rp. <?=number_format($kredit) ?></th>
               </tr>
+              <tr style="height: 100px !important">
+
+                  
+<td class="tg-0lax"></td>
+<td class="tg-0lax"></td>
+
+<td class="tg-0lax"><br><br><br><br><br></td>
+<td class="tg-0lax"></td>
+</tr>
+
+    <tr>
+        <td>Diketahui dan Setujui Oleh,</td>
+        <td></td>
+        <td></td>
+
+        <td style="text-align: right;">Denpasar, <?php echo date('d-F-Y')."<br> Dibuat Oleh"?>,</td>
+    </tr>
+    <tr height="50px">
+             
+<td class="tg-0lax"></td>
+<td class="tg-0lax"></td>
+<td class="tg-0lax"><br><br><br></td>
+<td class="tg-0lax"></td>
+</tr>
+    <tr >
+        <td >( ........................)</td>
+        <td></td>
+        <td></td>
+        <td style="text-align: right;">( ........................)</td>
+    </tr>
+    <tr >
+        <td><span style="padding-left: 30px;"></span>  Owner</td>
+        <td></td>
+        <td></td>
+
+        <td style="text-align: right;">Accounting<span style="padding-left: 15px;"></span> </td>
+    </tr>
           </table>
    
 </body>

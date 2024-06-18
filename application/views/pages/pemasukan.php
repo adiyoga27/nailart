@@ -27,13 +27,13 @@
                 <td><?=$no++?></td>
                 <!-- <td><?=tanggal($row->tanggal_pemasukan)?></td> -->
                 <td style="text-align: left"><a href="<?php echo base_url('pemasukan/view/'.$row->id_pemasukan)?>"><?=$row->id_pemasukan?></a></td>
-                <td style="text-align: left"><?=$row->tanggal_pemasukan?></td>
+                <td style="text-align: left"><?=date('d F Y', strtotime($row->tanggal_pemasukan))?></td>
                 <td style="text-align: right">Rp. <?=number_format($row->harga)?></td>
                 <td style="text-align: left"><?=$row->keterangan?></td>
                 <td>
 
                   <?php if ($row->invoice != '') { ?>
-                    <a target="_blank" href="<?=base_url('uploads/'.$row->invoice)?>" class="btn btn-success btn-sm"><span class="fa fa-file"></span></a>
+                    <!-- <a target="_blank" href="<?=base_url('uploads/'.$row->invoice)?>" class="btn btn-success btn-sm"><span class="fa fa-file"></span></a> -->
                   <?php } ?>
 
                   <a href="<?=base_url('pemasukan/edit/'.$row->id_pemasukan)?>" class="btn btn-info btn-sm"><span class="fa fa-edit"></span></a>

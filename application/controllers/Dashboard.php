@@ -96,7 +96,25 @@ class Dashboard extends CI_Controller
     // CURD AKUN
     public function akun()
     {
-        $data['data'] = $this->data->akun()->result();
+
+       $results= $this->data->akun()->result();
+       foreach ($results as $value) {
+            $saldo = $this->db->query(" SELECT SUM(kredit) - SUM(debit) as total_ FROM tb_jurnal where akun = '".$value->id_akun."'")->row()->total_;
+            if($saldo < 0){
+                $saldo = $saldo * -1;
+            }
+            $akuns[] = [
+                'id_akun' => $value->id_akun,
+                'kode_akun' => $value->kode_akun,
+                'nama_akun' => $value->nama_akun,
+                'kategori_akun' => $value->kategori_akun,
+                'tipe_akun' => $value->tipe_akun,
+               'saldo' => $saldo ?? 0,
+            ];
+
+       }
+                   
+        $data['data'] = $akuns;
         $data['title'] = 'Data Akun';
         $data['side'] = 'akun';
         $data['page'] = 'pages/akun';
@@ -148,9 +166,17 @@ class Dashboard extends CI_Controller
 
     public function delete_akun($kode)
     {
-        $this->db->delete('akun', ['id_akun' => $kode]);
-        $this->session->set_flashdata('msg', 'swal("Berhasil!", "Data berhasil dihapus", "success");');
-        redirect(base_url('akun'));
+        try {
+            //code...
+            $this->db->delete('akun', ['id_akun' => $kode]);
+            $this->db->delete('tb_jurnal', ['akun' => $kode]);
+            $this->db->delete('tb_pemasukan_lain', ['akun' => $kode]);
+    
+            $this->session->set_flashdata('msg', 'swal("Berhasil!", "Data berhasil dihapus", "success");');
+             redirect(base_url('akun'));
+        } catch (\Throwable $th) {
+            throw $th;
+        }
     }
 
     public function getAkun($id) {
@@ -340,7 +366,7 @@ class Dashboard extends CI_Controller
         } else {
             $data['akun'] = $this->data->akun()->result();
             $data['data'] = $this->data->pemasukan_lain($kode)->row();
-            $data['title'] = 'Tambah Data Pemasukan Lain-Lain';
+            $data['title'] = 'Update Data Pemasukan Lain-Lain';
             $data['side'] = 'pemasukan-lain';
             $data['page'] = 'pages/pemasukan-lain-form';
             $this->load->view('template', $data);
@@ -377,24 +403,24 @@ class Dashboard extends CI_Controller
                 if($this->db->get_where('pemasukan', ['id_pemasukan' => $p['kode']])->num_rows() > 0){
                     $kode = $this->kode->pemasukan();
                 }
-                $img = $kode;
+                // $img = $kode;
 
-                $config['upload_path'] = './uploads/';
-                $config['allowed_types'] = '*';
-                $config['file_name'] = $img;
-                $config['overwrite'] = true;
+                // $config['upload_path'] = './uploads/';
+                // $config['allowed_types'] = '*';
+                // $config['file_name'] = $img;
+                // $config['overwrite'] = true;
 
-                $this->load->library('upload', $config);
+                // $this->load->library('upload', $config);
 
-                if (!$this->upload->do_upload('invoice')) {
-                    $error = ['error' => $this->upload->display_errors()];
-                    print_r($error);
-                    exit();
-                    $this->session->set_flashdata('msg', 'swal("Ops!", "Invoice gagal diupload", "error");');
-                    redirect(base_url('pemasukan'));
-                }
+                // if (!$this->upload->do_upload('invoice')) {
+                //     $error = ['error' => $this->upload->display_errors()];
+                //     print_r($error);
+                //     exit();
+                //     $this->session->set_flashdata('msg', 'swal("Ops!", "Invoice gagal diupload", "error");');
+                //     redirect(base_url('pemasukan'));
+                // }
 
-                $upload = $this->upload->data();
+                // $upload = $this->upload->data();
 
                 $total = 0;
                 for ($i = 0; $i < count($p['id_produk']); $i++) {
@@ -408,7 +434,7 @@ class Dashboard extends CI_Controller
                         'qty' => $p['jumlah'][$i],
                         'total' => $p['total'][$i],
                     ]);
-                    $produk = $this->data->produk($p['id_produk'][$i])->row();
+                    // $produk = $this->data->produk($p['id_produk'][$i])->row();
 
                  
                 }
@@ -428,7 +454,7 @@ class Dashboard extends CI_Controller
                     'harga' => $total,
                     'tanggal_pemasukan' => $p['tanggal_pemasukan'],
                     'keterangan' => $p['keterangan'],
-                    'invoice' => $upload['file_name'],
+                    // 'invoice' => $upload['file_name'],
                     
                     'customer_nama' => $p['customer_nama'],
                     'customer_phone' => $p['customer_phone'],
@@ -499,26 +525,26 @@ class Dashboard extends CI_Controller
                     'customer_phone' => $p['customer_phone'],
                     'user' => $this->session->userdata('kode'),
                 ];
-                if (isset($p['invoice'])) {
-                    $img = $p['kode'];
+                // if (isset($p['invoice'])) {
+                //     $img = $p['kode'];
 
-                    $config['upload_path'] = './uploads/';
-                    $config['allowed_types'] = '*';
-                    $config['file_name'] = $img;
-                    $config['overwrite'] = true;
+                //     $config['upload_path'] = './uploads/';
+                //     $config['allowed_types'] = '*';
+                //     $config['file_name'] = $img;
+                //     $config['overwrite'] = true;
 
-                    $this->load->library('upload', $config);
+                //     $this->load->library('upload', $config);
 
-                    if (!$this->upload->do_upload('invoice')) {
-                        $error = ['error' => $this->upload->display_errors()];
-                        print_r($error);
-                        exit();
-                        $this->session->set_flashdata('msg', 'swal("Ops!", "Invoice gagal diupload", "error");');
-                        redirect(base_url('pemasukan'));
-                    }
-                    $upload = $this->upload->data();
-                    $data['invoice'] = $upload['file_name'];
-                }
+                //     if (!$this->upload->do_upload('invoice')) {
+                //         $error = ['error' => $this->upload->display_errors()];
+                //         print_r($error);
+                //         exit();
+                //         $this->session->set_flashdata('msg', 'swal("Ops!", "Invoice gagal diupload", "error");');
+                //         redirect(base_url('pemasukan'));
+                //     }
+                //     $upload = $this->upload->data();
+                //     $data['invoice'] = $upload['file_name'];
+                // }
                 $this->db->update('pemasukan', $data, [
 					'id_pemasukan' => $kode,
 				]);
@@ -594,19 +620,19 @@ class Dashboard extends CI_Controller
         if ($p = $this->input->post()) {
             $kode = $this->kode->pengeluaran();
 
-            $config['upload_path'] = './uploads/';
-            $config['allowed_types'] = '*';
-            $config['file_name'] = $kode;
-            $config['overwrite'] = true;
+            // $config['upload_path'] = './uploads/';
+            // $config['allowed_types'] = '*';
+            // $config['file_name'] = $kode;
+            // $config['overwrite'] = true;
 
-            $this->load->library('upload', $config);
+            // $this->load->library('upload', $config);
 
-            if (!$this->upload->do_upload('invoice')) {
-                $this->session->set_flashdata('msg', 'swal("Ops!", "Invoice gagal diupload", "error");');
-                redirect(base_url('pengeluaran'));
-            }
+            // if (!$this->upload->do_upload('invoice')) {
+            //     $this->session->set_flashdata('msg', 'swal("Ops!", "Invoice gagal diupload", "error");');
+            //     redirect(base_url('pengeluaran'));
+            // }
 
-            $upload = $this->upload->data();
+            // $upload = $this->upload->data();
 
             $data = [
                 'id_pengeluaran' => $kode,
@@ -614,7 +640,7 @@ class Dashboard extends CI_Controller
                 'akun' => $p['akun'],
                 'jumlah' => $p['harga'],
                 'tanggal_pengeluaran' => $p['tanggal_pengeluaran'],
-                'invoice' => $upload['file_name'],
+                // 'invoice' => $upload['file_name'],
                 'user' => $this->session->userdata('kode'),
             ];
 
@@ -664,17 +690,17 @@ class Dashboard extends CI_Controller
                 'keterangan' => $data['keterangan'],
             ];
 
-            $config['upload_path'] = './uploads/';
-            $config['allowed_types'] = '*';
-            $config['file_name'] = $kode;
-            $config['overwrite'] = true;
+            // $config['upload_path'] = './uploads/';
+            // $config['allowed_types'] = '*';
+            // $config['file_name'] = $kode;
+            // $config['overwrite'] = true;
 
-            $this->load->library('upload', $config);
+            // $this->load->library('upload', $config);
 
-            if ($this->upload->do_upload('invoice')) {
-                $upload = $this->upload->data();
-                $data['invoice'] = $upload['file_name'];
-            }
+            // if ($this->upload->do_upload('invoice')) {
+            //     $upload = $this->upload->data();
+            //     $data['invoice'] = $upload['file_name'];
+            // }
 
             $this->db->trans_start();
             $this->db->update('pengeluaran', $data, ['id_pengeluaran' => $kode]);
@@ -686,7 +712,7 @@ class Dashboard extends CI_Controller
             $data['data'] = $this->data->pengeluaran($kode)->row();
             $data['akun'] = $this->data->akun()->result();
             $data['produk'] = $this->data->produk()->result();
-            $data['title'] = 'Tambah Data pengeluaran';
+            $data['title'] = 'Update Data Pengeluaran';
             $data['side'] = 'pengeluaran';
             $data['page'] = 'pages/pengeluaran-form';
             $this->load->view('template', $data);

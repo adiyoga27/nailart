@@ -111,7 +111,6 @@
               </a>
             </li>
             <li class="treeview <?=$side == 'kas' ? 'active' : ''?> 
-                                <?=$side == 'jurnal' ? 'active' : ''?>
                                 <?=$side == 'labarugi' ? 'active' : ''?>
                                 <?=$side == 'perubahan-modal' ? 'active' : ''?>
                                 <?=$side == 'neraca' ? 'active' : ''?>

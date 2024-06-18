@@ -26,7 +26,7 @@
           </div>
  
 
-          <div class="form-group col-md-6">
+          <div class="form-group col-md-12">
             <label>Akun</label>
             <select name="akun" class="form-control" required>
               <option value="">-- Pilih Salah Satu --</option>
@@ -36,10 +36,10 @@
             </select>
           </div>
 
-          <div class="form-group col-md-6">
+          <!-- <div class="form-group col-md-6">
             <label>Invoice</label>
             <input type="file" name="invoice" <?=isset($data) ? '' : 'required'?> class="form-control" >
-          </div>
+          </div> -->
 
         </div>
         <div class="box-footer">

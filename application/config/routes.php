@@ -19,7 +19,7 @@ $route['akun']							= 'dashboard/akun';
 $route['akun/add']						= 'dashboard/add_akun';
 $route['akun/edit/(:any)']				= 'dashboard/edit_akun/$1';
 $route['akun/delete/(:any)']			= 'dashboard/delete_akun/$1';
-$route['akun/(:any)']			= 'dashboard/getAkun/$1';
+$route['akun/get/(:any)']			    = 'dashboard/getAkun/$1';
 
 //produk
 $route['produk']						= 'dashboard/produk';

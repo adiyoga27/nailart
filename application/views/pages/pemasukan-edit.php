@@ -30,7 +30,7 @@
                             <?= isset($data) ? '' : '<small><i>Anda bisa menambahkan lebih dari 1 produk</i></small>' ?>
                         </div> -->
                         <!--  -->
-                        <div class="form-group col-md-6">
+                        <div class="form-group col-md-12">
                             <label>Akun</label>
                             <select name="akun" class="form-control" required>
                                 <option value="">-- Pilih Salah Satu --</option>
@@ -41,11 +41,11 @@
                                 <?php } ?>
                             </select>
                         </div>
-                        <div class="form-group col-md-6">
+                        <!-- <div class="form-group col-md-6">
                             <label>Invoice</label>
                             <input type="file" name="invoice" <?= isset($data) ? '' : 'required' ?>
                                 class="form-control">
-                        </div>
+                        </div> -->
                         <div class="form-group col-md-6">
                             <label>Customer Nama</label>
                             <input type="text" name="customer_nama" value="<?=  isset($data) ? $data->customer_nama : '' ?>"
@@ -68,7 +68,7 @@
                 <div class="box box-danger">
                     <div class="box-body row">
                         <div class="form-group col-md-12">
-                            <h4>Data Produk</h4>
+                            <h4>Detail Pemasukan</h4>
                             <hr>
                             <div class="table-responsive">
                                 <table class="table table-bordered table-striped table-highlight">

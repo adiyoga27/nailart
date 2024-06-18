@@ -260,7 +260,7 @@ class Laporan extends CI_Controller {
 
 			if ($this->input->post('button') == 'cetak' ) {
 				ob_start();
-				$this->load->view('pages/export/export-labarugi', $data);
+				$this->load->view('pages/export/export-modal', $data);
 				$html = ob_get_contents();
 				ob_end_clean();
 					
@@ -268,7 +268,7 @@ class Laporan extends CI_Controller {
 				
 				$pdf = new Spipu\Html2Pdf\Html2Pdf('P','A4','en');
 				$pdf->WriteHTML($html);
-				$pdf->Output('Laporan Laba Rugi Tahun '.date('Y').'.pdf', 'D');
+				$pdf->Output('Laporan Perubahan Modal.pdf', 'D');
 			}else{
 				
 				$this->load->view('template',$data);

@@ -32,7 +32,7 @@
                 <td>
 
                   <?php if ($row->invoice != '') { ?>
-                    <a target="_blank" href="<?=base_url('uploads/'.$row->invoice)?>" class="btn btn-success btn-sm"><span class="fa fa-file"></span></a>
+                    <!-- <a target="_blank" href="<?=base_url('uploads/'.$row->invoice)?>" class="btn btn-success btn-sm"><span class="fa fa-file"></span></a> -->
                   <?php } ?>
                   
                   <a href="<?=base_url('pengeluaran/edit/'.$row->id_pengeluaran)?>" class="btn btn-info btn-sm"><span class="fa fa-edit"></span></a>

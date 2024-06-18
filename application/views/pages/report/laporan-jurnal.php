@@ -69,7 +69,15 @@
             <tbody>
                 <?php foreach($data as $value){?>
                   <tr>
-                    <td><?=$value['tanggal'] ?></td>
+                    <td><?php 
+                    if($value['tanggal'] == ""){
+
+                    }else{
+
+                      echo date('d F Y', strtotime($value['tanggal'])) ;
+                    }
+                    
+                    ?></td>
                     <td><?=$value['keterangan'] ?></td>
                     <td  style="text-align: center;"><?=$value['kode_akun'] ?></td>
                     <td><?=$value['nama_akun'] ?></td>

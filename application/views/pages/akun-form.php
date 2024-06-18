@@ -70,7 +70,7 @@ $(document).ready(function(){
     console.log('Selected option value:', selectedOptionValue);
 
     $.ajax({
-      url: "/akun/"+selectedOptionValue,  // URL where you want to send the request
+      url: "/akun/get/"+selectedOptionValue,  // URL where you want to send the request
       method: 'GET',  // HTTP method (GET, POST, PUT, DELETE, etc.)
       dataType: 'json',  // Expected data type from the server
       success: function(data) {

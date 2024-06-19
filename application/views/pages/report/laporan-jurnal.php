@@ -62,7 +62,7 @@
                 <th>Keterangan</th>
                 <th>Kode Akun</th>
                 <th>Nama Akun</th>
-                <th>Debet</th>
+                <th>Debit</th>
                 <th>Kredit</th>
               </tr>
             </thead>

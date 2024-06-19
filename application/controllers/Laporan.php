@@ -84,21 +84,41 @@ class Laporan extends CI_Controller {
 
 						$previousDate = null;
 						foreach ($jurnals as $value) {
-							if($previousDate == null || $value->tanggal != $previousDate){
+							// if($previousDate == null || $value->tanggal != $previousDate){
 								$tanggal = $value->tanggal;
-							$previousDate = $value->tanggal;
-							}else{
-								$tanggal = "";
+							// $previousDate = $value->tanggal;
+							// }else{
+							// 	$tanggal = "";
+							// }
+							if($value->kredit>0){
+								$results[] = array(
+									'tanggal' => $tanggal,
+									'keterangan' => "Kas",
+									'kode_akun' => '101',
+									'nama_akun' => "Kas",
+									'debit' => $value->kredit,
+									'kredit' =>0,
+								);
 							}
-							
 							$results[] = array(
-								'tanggal' => $tanggal,
+								'tanggal' => $value->kredit>0 ? "" :$tanggal,
 								'keterangan' => $value->keterangan,
 								'kode_akun' => $value->kode_akun,
 								'nama_akun' => $value->nama_akun,
 								'debit' => $value->debit,
 								'kredit' => $value->kredit,
 							);
+
+							if($value->debit>0){
+								$results[] = array(
+									'tanggal' => "",
+									'keterangan' => "Kas",
+									'kode_akun' => '101',
+									'nama_akun' => "Kas",
+									'debit' => 0,
+									'kredit' => $value->debit,
+								);
+							}
 						}
 						$data['month'] = $month;
 						$data['year'] = $year;

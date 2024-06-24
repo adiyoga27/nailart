@@ -27,69 +27,37 @@
     <p style="text-align: center; margin-top:-10px"><b>Laporan Arus Kas</b></p>
     <p style="text-align: center; margin-top:-10px"><b>Periode : <?php echo date('d-m-Y', strtotime($startAt))?> s/d <?php echo date('d-m-Y', strtotime($endAt))?></b></p>
 
-    <table style="width: 100% !important;">
-        <?php
-              $saldo = 0;
-              $no = 1; 
-              foreach ($data as $row) {  ?>
-        <tr style="background:#e0e0e0 !important; font-weight:bold; width:100% !important">
-            <td colspan="3" ><col width="245">ARUS KAS DARI <?php echo strtoupper(str_replace('_', ' ', $row['title'])); ?></td>
-     
-        </tr>
-        <?php foreach($row['content'] as $c ) {
-                  if($c['kredit']>0){
-                    $saldo += $c['kredit'];
-                  }else{
-                    $saldo -= $c['debit'];
-                  }
-                  
-                  ?>
-        <tr>
-            <td><?php echo "      ".$c['akun'];?></td>
-            <td>Rp<?php echo number_format($c['debit'] > 0 ? $c['debit'] : $c['kredit'], 0, ',', '.'); ?></td>
-            <td></td>
-        </tr>
-
-        <?php } ?>
-
-        <?php } ?>
-        <tr style="background:#e0e0e0 !important; ; font-weight:bold">
-            <td colspan="2"> KAS BERSIH</td>
-            <td >Rp<?php echo number_format($saldo, 0, ',', '.'); ?></td>
-
-        </tr>
-
-        
-   <tr style="height: 100px !important">
-
-                  
-    <td class="tg-0lax"></td>
-    <td class="tg-0lax"><br><br><br><br><br></td>
-    <td class="tg-0lax"></td>
-   </tr>
-
-        <tr>
-            <td>Diketahui dan Setujui Oleh,</td>
-            <td></td>
-
-            <td style="text-align: right;">Denpasar, <?php echo date('d-F-Y')."<br> Dibuat Oleh"?>,</td>
-        </tr>
-        <tr height="50px">
-                 
-    <td class="tg-0lax"></td>
-    <td class="tg-0lax"><br><br><br></td>
-    <td class="tg-0lax"></td>
-</tr>
-        <tr >
-            <td >( ........................)</td>
-            <td></td>
-            <td style="text-align: right;">( ........................)</td>
-        </tr>
-        <tr >
-            <td><span style="padding-left: 30px;"></span>  Owner</td>
-            <td></td>
-
-            <td style="text-align: right;">Accounting<span style="padding-left: 15px;"></span> </td>
-        </tr>
+    <table  border="1">
+    <tr>
+              <th style="width: 50px;">No</th>
+              <th style="width: 100px;">  <col width="100"> Tanggal</th>
+              <th style="width: 300px;">Keterangan</th>
+              <th  style="width: 100px;">Kas Masuk</th>
+              <th  style="width: 100px;">Kas Keluar</th>
+            </tr>
+              <?php
+              $saldo =  $debit = $kredit = 0;
+              $no = 1; foreach ($data as $row) { 
+                $debit += $row->debit;
+                $kredit += $row->kredit;
+                $saldo += ($row->kredit - $row->debit); 
+                ?>
+              <tr>
+                <td><?=$no++?></td>
+                <td><?=tanggal($row->tanggal)?></td>
+                <td style="text-align: left"><?=$row->keterangan?></td>
+                <td style="text-align: right">Rp. <?=number_format($row->kredit,0,",",".")?></td>
+                <td style="text-align: right">Rp. <?=number_format($row->debit,0,",",".")?></td>
+              </tr>
+              <?php } ?>
+                  <tr>
+                    <th colspan="3">Total</th>
+                    <th style="text-align: right;">Rp. <?=number_format($kredit,0,",",".")?></th>
+                    <th style="text-align: right;">Rp. <?=number_format($debit,0,",",".")?></th>
+                  </tr>
+                  <tr>
+                    <th colspan="3">Total Kas Bersih</th>
+                    <th  colspan="2" style="text-align: center;">Rp. <?=number_format($saldo,0,",",".")?></th>
+                  </tr>
 </table>
 </body>

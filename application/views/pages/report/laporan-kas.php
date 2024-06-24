@@ -38,34 +38,41 @@
       <div class="box box-danger">
         <div class="box-body">
     <table class="table table-sm table-dark">
-            <?php
-              $saldo = 0;
-              $no = 1; 
-              foreach ($data as $row) {  ?>
-              <tr style="background-color:darkgrey !important; font-weight:bold"><td class="table-dark" colspan="3">ARUS KAS DARI <?php echo strtoupper(str_replace('_',' ',$row['title']))?></td></tr>
-                <?php foreach($row['content'] as $c ) {
-                  if($c['kredit']>0){
-                    $saldo += $c['kredit'];
-                  }else{
-                    $saldo -= $c['debit'];
-                  }
-                  
-                  ?>
-                  <tr >
-                    <td width="40%"> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<?php echo $c['akun']?></td>
-                    
-                    <td>Rp<?php echo number_format($c['debit'] > 0 ? $c['debit'] : $c['kredit'],0,",",".") ?></td>
-                    <td></td>
-                  </tr>
-                
-                <?php } ?>
-
-              <?php } ?>
-              <tr style="background-color:darkgrey !important; ; font-weight:bold">
-                <td class="table-dark" colspan="2">KAS BERSIH</td>
-                <td class="table-dark" colspan="2">Rp<?php echo number_format($saldo,0,",",".")?></td>
-
+    <thead>
+              <th width="1%">No</th>
+              <th>Tanggal</th>
+              <th>Keterangan</th>
+              <th>Kas Masuk</th>
+              <th>Kas Keluar</th>
+            </thead>
+            <tbody>
+              <?php
+              $saldo =  $debit = $kredit = 0;
+              $no = 1; foreach ($data as $row) { 
+                $debit += $row->debit;
+                $kredit += $row->kredit;
+                $saldo += ($row->kredit - $row->debit); 
+                ?>
+              <tr>
+                <td><?=$no++?></td>
+                <td><?=tanggal($row->tanggal)?></td>
+                <td style="text-align: left"><?=$row->keterangan?></td>
+                <td>Rp. <?=number_format($row->kredit)?></td>
+                <td>Rp. <?=number_format($row->debit)?></td>
               </tr>
+              <?php } ?>
+            </tbody>
+            <tfoot>
+                  <tr>
+                    <th colspan="3">Total</th>
+                    <th style="text-align: end;">Rp. <?=number_format($kredit,0,",",".")?></th>
+                    <th style="text-align: end;">Rp. <?=number_format($debit,0,",",".")?></th>
+                  </tr>
+                  <tr>
+                    <th colspan="3">Total Kas Bersih</th>
+                    <th  colspan="2" style="text-align: center;">Rp. <?=number_format($saldo,0,",",".")?></th>
+                  </tr>
+            </tfoot>
             </table>
         </div>
       </div>

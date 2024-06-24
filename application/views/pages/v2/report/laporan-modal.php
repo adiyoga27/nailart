@@ -54,40 +54,50 @@
     <section class="col-lg-12 connectedSortable">
       <div class="box box-danger">
         <div class="box-body">
-        <table class="table table-bordered table-striped" >
-            <thead>
+        <table class="table table-sm table-dark">
+          <?php 
+         
+         $modal = $pendapatan =$prive = 0;
+          foreach ($data as $row) {
+      
+            if ($row->kategori_akun == 'modal') {
+              $modal = $row->kredit;
+            }else if($row->kategori_akun == 'pendapatan'){
+              $pendapatan = $row->kredit;
+            }else if($row->kategori_akun == 'prive'){
+              $prive = $row->kredit;
+            }
+
+            ?>
+            <?php } ?>
+
               <tr>
-                <th colspan="2"  style="text-align: center !important;">Aktiva</th>
-                <th colspan="2"  style="text-align: center !important;">Pasiva</th>
-              </tr>
-             
-            </thead>
-            <tbody>
-              <tr  style="font-weight: bold;">
-                <td colspan="2">Aktiva Lancar</td>
-                <td  colspan="2">Pasiva</td>
-              </tr>
-              <tr>
-                <td>Kas</td>
-                <td>Rp. <?=number_format($data['kas'],0,",",".")?></td>
                 <td>Modal Awal</td>
-                <td>Rp. <?=number_format($data['modal'],0,",",".")?></td>
+                <td></td>
+                <td>Rp<?php echo (number_format($modal,0,',','.') ) ?></td>
               </tr>
               <tr>
-              
-                <td colspan="2"></td>
-                <td>Laba Ditahan</td>
-                <td>Rp. <?=number_format($data['ditahan'],0,",",".")?></td>
+                <td>Laba Bersih</td>
+                <td>Rp<?php echo ( number_format($pendapatan,0,',','.')) ?></td>
+                <td></td>
               </tr>
-              <tr  style="font-weight: bold;">
-              
-              <td>Total Aktiva</td>
-              <td>Rp. <?=number_format($data['kas'],0,",",".")?></td>
-              <td>Total Pasiva</td>
-              <td>Rp. <?=number_format($data['modal'] + $data['ditahan'],0,",",".")?></td>
-            </tr>
-            </tbody>
-          </table>
+              <tr>
+                <td>Prive</td>
+                <td>Rp<?php echo (number_format($prive,0,',','.') ) ?></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Penambahan Modal</td>
+                <td></td>
+                <td>Rp<?php echo (number_format($pendapatan-$prive,0,',','.'));?></td>
+              </tr>
+
+
+              <tr style="background-color:darkgrey !important; ; font-weight:bold">
+                <td class="table-dark" colspan="2">Modal Akhir <?php echo date('M Y', strtotime($year."-".$month."-01"))?></td>
+                <td class="table-dark" colspan="2">Rp<?php echo (number_format($modal + ($pendapatan-$prive),0,',','.'));?></td>
+              </tr>
+            </table>
         </div>
       </div>
     </section>

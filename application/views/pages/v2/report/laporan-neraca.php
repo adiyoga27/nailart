@@ -54,38 +54,39 @@
     <section class="col-lg-12 connectedSortable">
       <div class="box box-danger">
         <div class="box-body">
-        <table class="table table-bordered table-striped" >
+        <table class="table table-bordered table-striped text-center" >
             <thead>
               <tr>
-                <th colspan="2"  style="text-align: center !important;">Aktiva</th>
-                <th colspan="2"  style="text-align: center !important;">Pasiva</th>
+                <th rowspan="2" width="1%">No</th>
+                <th rowspan="2">Akun</th>
+                <th colspan="2">Saldo</th>
               </tr>
-             
+              <tr>
+                <th>Debit</th>
+                <th>Kredit</th>
+              </tr>
             </thead>
             <tbody>
-              <tr  style="font-weight: bold;">
-                <td colspan="2">Aktiva Lancar</td>
-                <td  colspan="2">Pasiva</td>
-              </tr>
+              <?php
+              $debit = 0;
+              $kredit= 0;
+              $no = 1; foreach ($data as $row) {?>
               <tr>
-                <td>Kas</td>
-                <td>Rp. <?=number_format($data['kas'],0,",",".")?></td>
-                <td>Modal Awal</td>
-                <td>Rp. <?=number_format($data['modal'],0,",",".")?></td>
+                <td><?=$no++?></td>
+                <td style="text-align: left"><?=$row->nama_akun?></td>
+                <td>Rp. <?=number_format($row->kategori_akun == 'aset' ? $row->kredit_ : $row->debit_)?></td>
+                <td>Rp. <?=number_format($row->kategori_akun == 'aset' ? $row->debit_ : $row->kredit_) ?></td>
               </tr>
+              <?php 
+
+              $debit += $row->kategori_akun == 'aset' ? $row->kredit_ : $row->debit_; 
+              $kredit+= $row->kategori_akun == 'aset' ? $row->debit_ : $row->kredit_;
+              } ?>
               <tr>
-              
-                <td colspan="2"></td>
-                <td>Laba Ditahan</td>
-                <td>Rp. <?=number_format($data['ditahan'],0,",",".")?></td>
-              </tr>
-              <tr  style="font-weight: bold;">
-              
-              <td>Total Aktiva</td>
-              <td>Rp. <?=number_format($data['kas'],0,",",".")?></td>
-              <td>Total Pasiva</td>
-              <td>Rp. <?=number_format($data['modal'] + $data['ditahan'],0,",",".")?></td>
-            </tr>
+                <th colspan="2">Total</th>
+                <th>Rp. <?=number_format($debit) ?></th>
+                <th>Rp. <?=number_format($kredit) ?></th>
+
             </tbody>
           </table>
         </div>

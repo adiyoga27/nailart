@@ -19,27 +19,35 @@ class Laporan extends CI_Controller {
 		}
 		
 		
-			$akuns = $this->data->tipeAkun()->result();
-			foreach ($akuns as $akun) { 
-				$res = [];
-				$resAmounts = $this->data->akunAmount($akun->tipe_akun, $startAt, $endAt )->result();
+			// $akuns = $this->data->tipeAkun()->result();
+			// foreach ($akuns as $akun) { 
+			// 	$res = [];
+			// 	$resAmounts = $this->data->akunAmount($akun->tipe_akun, $startAt, $endAt )->result();
 				
 			
-				foreach ($resAmounts as $v) {
+			// 	foreach ($resAmounts as $v) {
 				
-					$res[] = array(
-						'akun' => $v->nama_akun,
-						'debit' => $v->debit,
-						'kredit' => $v->kredit,
-					);
-				}
-				$result[] = array(
-					'title' => $akun->tipe_akun,
-					'content' => $res,
+			// 		$res[] = array(
+			// 			'akun' => $v->nama_akun,
+			// 			'debit' => $v->debit,
+			// 			'kredit' => $v->kredit,
+			// 		);
+			// 	}
+			// 	$result[] = array(
+			// 		'title' => $akun->tipe_akun,
+			// 		'content' => $res,
 				
-				);
-			}
-			$data['data']	= $result;
+			// 	);
+			// }
+			$results = $this->db->from('jurnal')
+						->join('akun','jurnal.akun = akun.id_akun')
+						->where('tanggal >=',$startAt)
+						->where('tanggal <=',$endAt)
+						->where_in('akun.kategori_akun', ['modal', 'beban', 'prive', 'pendapatan'])
+						->order_by('jurnal.tanggal', 'asc')
+						->get()->result();
+					
+			$data['data']	= $results;
 			$data['title'] 	= 'Laporan Arus Kas';
 			$data['side'] 	= 'kas';
 			$data['page'] 	= 'pages/report/laporan-kas';
@@ -159,35 +167,68 @@ class Laporan extends CI_Controller {
 		}
 		
 		
-			$akuns = $this->data->akunLabaRugi()->result();
-		
-			foreach ($akuns as $akun) { 
-				$res = $result =[];
-				$tipes = $this->data->akunLabaRugi($akun->tipe_akun)->result();
-				foreach ($tipes as $t) { 
 
-					$resAmounts = $this->data->labaRugiAmount($t->id_akun, $startAt, $endAt )->result();
-					
-					foreach ($resAmounts as $v) {
-					
-						$res[] = array(
-							'akun' => $v->nama_akun,
-							'debit' => $v->debit,
-							'kredit' => $v->kredit,
-						);
-					}
-					$result[] = array(
-						'title' => $t->tipe_akun,
-						'content' => $res,
-					
+			$categories = ['pendapatan', 'beban'];
+			foreach ($categories as $c) {
+				$res = $result = [];
+				$akuns = $this->db
+						->select('jurnal.akun, akun.tipe_akun, akun.nama_akun, sum(debit) as debit, sum(kredit) as kredit')
+						->from('akun')
+						->join('jurnal', 'akun.id_akun = jurnal.akun')
+						->where('kategori_akun', $c)
+						->group_by('jurnal.akun')
+						->order_by('kode_akun', 'asc')
+						->get()->result();
+
+				
+				foreach ($akuns as $v) {
+					$res[] = array(
+						'akun' => $v->nama_akun,
+						'debit' => $v->debit,
+						'kredit' => $v->kredit,
 					);
+					
 				}
+				$result[] = array(
+					'title' => $v->tipe_akun,
+					'content' => $res,
+				
+				);
 				$data[] = array(
-					'kategori' => $akun->kategori_akun,
+					'kategori' => $c,
 					'content' => $result,
 				
 				);
 			}
+	
+			
+			// foreach ($akuns as $akun) { 
+			// 	$res = $result =[];
+			// 	$tipes = $this->data->akunLabaRugi($akun->tipe_akun)->result();
+			// 	foreach ($tipes as $t) { 
+
+			// 		$resAmounts = $this->data->labaRugiAmount($t->id_akun, $startAt, $endAt )->result();
+					
+			// 		foreach ($resAmounts as $v) {
+					
+			// 			$res[] = array(
+			// 				'akun' => $v->nama_akun,
+			// 				'debit' => $v->debit,
+			// 				'kredit' => $v->kredit,
+			// 			);
+			// 		}
+			// 		$result[] = array(
+			// 			'title' => $t->tipe_akun,
+			// 			'content' => $res,
+					
+			// 		);
+			// 	}
+			// 	$data[] = array(
+			// 		'kategori' => $akun->kategori_akun,
+			// 		'content' => $result,
+				
+			// 	);
+			// }
 			$data['data']	= $data;
 			$data['title'] 	= 'Laporan Laba Rugi Tahun '.date('Y');
 			$data['side'] 	= 'labarugi';
@@ -221,43 +262,53 @@ class Laporan extends CI_Controller {
 
 			$month = $this->input->post('month') ?? $month;
 			$year = $this->input->post('year') ?? $year;
-
-			$data['month']	= $month;
-			$data['year']	= $year;
-			$data['data']	= $this->data->neraca($month,$year)->result();
-			$data['title'] 	= 'Laporan Jurnal Umum';
-			$data['side'] 	= 'jurnal';
-			$data['page'] 	= 'pages/report/laporan-neraca';
-			$this->load->view('template',$data);
-
 		}
-		elseif ($this->input->post('button') == 'cetak' ) {
-			$data['month']	= $month;
-			$data['year']	= $year;
-				$data['data'] = $this->data->neraca($month,$year)->result();
-				ob_start();
-				$this->load->view('pages/export/export-neraca', $data);
-				$html = ob_get_contents();
-				ob_end_clean();
+
+		$dateBefore = date('Y-m-t', strtotime($year."-".$month."-01"));
+
+		$result = array(
+			'kas' => $this->db->select('(sum(kredit) - sum(debit)) as kas')
+						->from('jurnal')
+						->where('tanggal <= ', $dateBefore)
+						->get()->row()->kas ?? 0,
+			'modal' => $this->db->select('(sum(kredit) - sum(debit)) as modal')
+						->from('jurnal')
+						->join('akun', 'jurnal.akun = akun.id_akun')
+						->where('kategori_akun','modal')
+						->where('tanggal <= ', $dateBefore)
+						->get()->row()->modal ?? 0,
+			'ditahan' => $this->db->select('(sum(kredit) - sum(debit)) as ditahan')
+						->from('jurnal')
+						->join('akun', 'jurnal.akun = akun.id_akun')
+						->where_in('kategori_akun',['pendapatan', 'beban', 'prive'])
+						->where('tanggal <= ', $dateBefore)
+						->get()->row()->ditahan ?? 0
+		);
+
+			if ($this->input->post('button') == 'cetak' ) {
 					
-				require './assets/plugins/html2pdf/autoload.php';
-				
-				$pdf = new Spipu\Html2Pdf\Html2Pdf('P','A4','en');
-				$pdf->WriteHTML($html);
-				$pdf->Output('Laporan Neraca '.'.pdf', 'D');
-			
-		}
-		else
-		{
+						$data['data'] = $result;
+						ob_start();
+						$this->load->view('pages/export/export-neraca', $data);
+						$html = ob_get_contents();
+						ob_end_clean();
+							
+						require './assets/plugins/html2pdf/autoload.php';
+						
+						$pdf = new Spipu\Html2Pdf\Html2Pdf('P','A4','en');
+						$pdf->WriteHTML($html);
+						$pdf->Output('Laporan Neraca '.'.pdf', 'D');
+					
+				}
+
 			$data['month']	= $month;
 			$data['year']	= $year;
-			$data['data']	= $this->data->neraca($month,$year)->result(); 
+			$data['data']	= $result; 
 			$data['title'] 	= 'Laporan Neraca';
 			$data['side'] 	= 'neraca';
 			$data['page'] 	= 'pages/report/laporan-neraca';
 			$this->load->view('template',$data);
 
-		}
 	}
 
 	public function perubahan_modal()

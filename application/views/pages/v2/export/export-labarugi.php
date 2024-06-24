@@ -35,9 +35,9 @@
         <?php foreach($row['content'] as $c ) {
                   $kredit = $debit = 0;
                   ?>
-        <!-- <tr>
+        <tr>
             <td colspan="3"> <b><?php echo ' ' . ucwords(str_replace('_', ' ', $c['title'])); ?></b></td>
-        </tr> -->
+        </tr>
         <?php foreach($c['content'] as $t ) {
                   if($t['kredit']>0){
                     $kredit += $t['kredit'];
@@ -59,7 +59,7 @@
             <td></td>
         </tr>
         <?php } ?>
-        <!-- <tr>
+        <tr>
             <td colspan="1"><b> Total <?php echo ucwords(str_replace('_', ' ', $row['kategori'])); ?></b></td>
             <?php if($debit > 0){?>
 
@@ -69,11 +69,11 @@
 
               <?php }?>
 
-        </tr> -->
+        </tr>
         <?php } ?>
         <?php } ?>
         <tr style="background:#e0e0e0 !important; font-weight:bold; width:100% !important">
-            <td  colspan="2">  Laba / Rugi Bersih</td>
+            <td  colspan="2"> KAS BERSIH</td>
             <td> <col width="300">Rp<?php echo number_format($saldo, 0, ',', '.'); ?></td>
         </tr>
         <tr style="height: 100px !important">

@@ -63,13 +63,14 @@
             if ($row->kategori_akun == 'modal') {
               $modal = $row->kredit;
             }else if($row->kategori_akun == 'pendapatan'){
-              $pendapatan = $row->kredit;
+              $pendapatan = $pendapatan + $row->kredit;
             }else if($row->kategori_akun == 'prive'){
               $prive = $row->kredit;
+            }else if($row->kategori_akun == 'beban'){
+              $pendapatan = $pendapatan - $row->debit;
             }
-
             ?>
-            <?php } ?>
+          <?php } ?>
 
               <tr>
                 <td>Modal Awal</td>

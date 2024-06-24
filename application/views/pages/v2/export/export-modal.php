@@ -33,15 +33,12 @@
          $modal = $pendapatan =$prive = 0;
           foreach ($data as $row) {
       
-           
             if ($row->kategori_akun == 'modal') {
               $modal = $row->kredit;
             }else if($row->kategori_akun == 'pendapatan'){
-              $pendapatan = $pendapatan + $row->kredit;
+              $pendapatan = $row->kredit;
             }else if($row->kategori_akun == 'prive'){
               $prive = $row->kredit;
-            }else if($row->kategori_akun == 'beban'){
-              $pendapatan = $pendapatan - $row->debit;
             }
 
             ?>

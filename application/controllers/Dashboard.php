@@ -182,7 +182,7 @@ class Dashboard extends CI_Controller
     public function getAkun($id) {
         $result = $this->db->select('*')
             ->from('akun')
-            ->where('tipe_akun', $id)
+            ->where('kategori_akun', $id)
             ->order_by('id_akun', 'DESC')
             ->get()->row();
         

@@ -41,43 +41,28 @@
             <?php
               $saldo = 0;
               $no = 1; 
-              
               foreach ($data as $row) {  ?>
-              <tr style="background-color:darkgrey !important; font-weight:bold"><td class="table-dark" colspan="3"> <?php echo strtoupper(str_replace('_',' ',$row['kategori']))?></td></tr>
+              <tr style="background-color:darkgrey !important; font-weight:bold"><td class="table-dark" colspan="3">ARUS KAS DARI <?php echo strtoupper(str_replace('_',' ',$row['title']))?></td></tr>
                 <?php foreach($row['content'] as $c ) {
-                  $kredit = $debit = 0;
-                  ?>
-                <!-- <tr ><td class="table-dark" colspan="3"> <b><?php echo ucwords(str_replace('_',' ',$c['title']))?></b></td></tr> -->
-                 <?php foreach($c['content'] as $t ) {
-                  
-                  if($t['kredit']>0){
-                    $kredit += $t['kredit'];
-                    $saldo += $t['kredit'];
+                  if($c['kredit']>0){
+                    $saldo += $c['kredit'];
                   }else{
-                    $debit += $t['debit'];
-                    $saldo -= $t['debit'];
+                    $saldo -= $c['debit'];
                   }
                   
                   ?>
-
                   <tr >
-                    <td width="40%"> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<?php echo ucwords($t['akun'])?></td>
+                    <td width="40%"> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<?php echo $c['akun']?></td>
                     
-                    <td>Rp<?php echo number_format($t['debit'] > 0 ? $t['debit'] : $t['kredit'],0,",",".") ?></td>
+                    <td>Rp<?php echo number_format($c['debit'] > 0 ? $c['debit'] : $c['kredit'],0,",",".") ?></td>
                     <td></td>
                   </tr>
-                  <?php } ?>
-                  <!-- <tr >
-                    <td class="table-dark" colspan="1"> <b>Total <?php echo ucwords(str_replace('_',' ',$row['kategori']))?></b></td>
-                    <td class="table-dark"> &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp <b> Rp. <?php echo number_format($debit > 0 ? $debit : $kredit,0,",",".")?></b> </td>
-                  </tr> -->
-                
                 
                 <?php } ?>
 
               <?php } ?>
               <tr style="background-color:darkgrey !important; ; font-weight:bold">
-                <td class="table-dark" colspan="2">Laba / Rugi Bersih</td>
+                <td class="table-dark" colspan="2">KAS BERSIH</td>
                 <td class="table-dark" colspan="2">Rp<?php echo number_format($saldo,0,",",".")?></td>
 
               </tr>

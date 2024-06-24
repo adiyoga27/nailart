@@ -8,7 +8,7 @@
         <div class="box-body row">
         <div class="form-group col-md-6">
             <label>Kategori Akun</label>
-            <select name="kategori_akun" class="form-control" required>
+            <select name="kategori_akun" id="kategori_akun" class="form-control" required>
               
               <option value="">Pilih Salah Satu</option>
               <option <?=isset($data)&&$data->kategori_akun == 'modal' ? 'selected' : ''?> value="modal"> Modal </option>
@@ -64,7 +64,7 @@
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
 <script>
 $(document).ready(function(){
-  $('#tipe_akun').on('change', function() {
+  $('#kategori_akun').on('change', function() {
     var kode = "";
     var selectedOptionValue = $(this).val();
     console.log('Selected option value:', selectedOptionValue);

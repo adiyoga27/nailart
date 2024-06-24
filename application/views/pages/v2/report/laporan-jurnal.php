@@ -56,37 +56,47 @@
         <div class="box-body">
         <table class="table table-bordered table-striped" >
             <thead>
-              <tr>
-                <th colspan="2"  style="text-align: center !important;">Aktiva</th>
-                <th colspan="2"  style="text-align: center !important;">Pasiva</th>
-              </tr>
              
+              <tr>
+                <th>Tanggal</th>
+                <th>Keterangan</th>
+                <th>Kode Akun</th>
+                <th>Nama Akun</th>
+                <th>Debit</th>
+                <th>Kredit</th>
+              </tr>
             </thead>
             <tbody>
-              <tr  style="font-weight: bold;">
-                <td colspan="2">Aktiva Lancar</td>
-                <td  colspan="2">Pasiva</td>
-              </tr>
-              <tr>
-                <td>Kas</td>
-                <td>Rp. <?=number_format($data['kas'],0,",",".")?></td>
-                <td>Modal Awal</td>
-                <td>Rp. <?=number_format($data['modal'],0,",",".")?></td>
-              </tr>
-              <tr>
-              
-                <td colspan="2"></td>
-                <td>Laba Ditahan</td>
-                <td>Rp. <?=number_format($data['ditahan'],0,",",".")?></td>
-              </tr>
-              <tr  style="font-weight: bold;">
-              
-              <td>Total Aktiva</td>
-              <td>Rp. <?=number_format($data['kas'],0,",",".")?></td>
-              <td>Total Pasiva</td>
-              <td>Rp. <?=number_format($data['modal'] + $data['ditahan'],0,",",".")?></td>
-            </tr>
+                <?php foreach($data as $value){?>
+                  <tr>
+                    <td><?php 
+                    if($value['tanggal'] == ""){
+
+                    }else{
+
+                      echo date('d F Y', strtotime($value['tanggal'])) ;
+                    }
+                    
+                    ?></td>
+                    <td><?=$value['keterangan'] ?></td>
+                    <td  style="text-align: center;"><?=$value['kode_akun'] ?></td>
+                    <td><?=$value['nama_akun'] ?></td>
+                    <td style="text-align: end;"><?=number_format($value['debit'],0,",",".") ?></td>
+                    <td style="text-align: end;"><?=number_format($value['kredit'],0,",",".") ?></td>
+
+                  </tr>
+                  <?php 
+                  $debit+= $value['debit'];
+                  $kredit+= $value['kredit'];
+                } ?>
             </tbody>
+            <tfoot>
+                  <tr>
+                    <th colspan="4">Total</th>
+                    <th style="text-align: end;"><?=number_format($debit,0,",",".")?></th>
+                    <th style="text-align: end;"><?=number_format($kredit,0,",",".")?></th>
+                  </tr>
+            </tfoot>
           </table>
         </div>
       </div>

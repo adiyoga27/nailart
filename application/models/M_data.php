@@ -56,7 +56,7 @@ class M_data extends CI_Model {
 			
 		}
 		$this->db->order_by('tipe_akun','DESC');
-		$this->db->group_by('kategori_akun');
+		$this->db->group_by('id_akun');
 		return $this->db->get();
 	}
 
@@ -91,9 +91,11 @@ class M_data extends CI_Model {
 				->join('akun','akun.id_akun = jurnal.akun')
 				->where('MONTH(tanggal)',$month)
 				->where('YEAR(tanggal)',$year)
-				->where_in('kategori_akun', ['modal','prive','pendapatan'])
+				->where_in('kategori_akun', ['modal', 'beban', 'prive', 'pendapatan'])
 				->group_by('akun.kategori_akun')
 				->get();
+
+				
 	}
 
 	public function produk($kode=null)

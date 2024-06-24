@@ -29,7 +29,7 @@
               </tr>
               <tr style="background:#e0e0e0 !important; font-weight:bold; width:100% !important">
                 <th style="text-align: start" colspan="2">Aktiva Lancar</th>
-                <th style="text-align: start" colspan="2">Pasiva</th>
+                <th style="text-align: start" colspan="2">Modal</th>
               </tr>
       
               <tr>

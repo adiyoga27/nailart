@@ -65,7 +65,7 @@
             <tbody>
               <tr  style="font-weight: bold;">
                 <td colspan="2">Aktiva Lancar</td>
-                <td  colspan="2">Pasiva</td>
+                <td  colspan="2">Modal</td>
               </tr>
               <tr>
                 <td>Kas</td>

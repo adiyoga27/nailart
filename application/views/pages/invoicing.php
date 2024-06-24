@@ -7,7 +7,15 @@
 
         background: white !important;
     }
+    
 </style>
+<style media="print">
+    /* Hide specific elements */
+    .hide-on-print {
+        display: none;
+    }
+</style>
+
 <section class="content">
     <!-- Main row -->
     <div class="row">
@@ -105,10 +113,10 @@ $total += $value->total;
                                                 <div class="d-print-none">
                                                     <div class="float-end">
                                                         <a href="<?php echo base_url('pemasukan')?>"
-                                                            class="btn btn-primary waves-effect waves-light"><i
+                                                            class="btn btn-primary waves-effect waves-light hide-on-print"><i
                                                                 class="fa fa-home"></i> | Back</a>
                                                         <a href="javascript:window.print()"
-                                                            class="btn btn-success w-md  waves-effect waves-light me-1"><i
+                                                            class="btn btn-success w-md  waves-effect waves-light me-1 hide-on-print"><i
                                                                 class="fa fa-print"></i> | Cetak</a>
                                                     </div>
                                                 </div>

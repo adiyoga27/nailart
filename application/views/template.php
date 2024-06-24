@@ -152,7 +152,7 @@
         <?php $this->load->view($page)?>
 
       </div>
-      <footer class="main-footer text-center">
+      <footer class="main-footer text-center hide-on-print">
         Copyright &copy; <?=date('Y')?> <strong>Sistem Informasi Keuangan Make Nail Studio</strong>. All rights reserved.
       </footer>
       <div class="control-sidebar-bg"></div>

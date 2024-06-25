@@ -21,7 +21,7 @@
     <hr>
     <br>
     <p style="text-align: center; margin-top:-10px"><b>Laporan Neraca</b></p>
-    <p style="text-align: center; margin-top:-10px"><b>Periode : <?php echo date('d-m-Y', strtotime($year."-".$month."-01")); ?> s/d <?php echo date('t-m-Y', strtotime($year."-".$month."-01")); ?></b></p>
+    <p style="text-align: center; margin-top:-10px"><b>Periode : <?php echo date('01-m-Y', strtotime($year."-".$month."-01"))?> s/d <?php echo date('t-m-Y', strtotime($year."-".$month."-01"))?></b></p>
     <table>
               <tr style="background:#e0e0e0 !important; font-weight:bold; width:100% !important">
                 <th style="text-align: center" colspan="2">Aktiva</th>

@@ -30,7 +30,7 @@
                 <td style="text-align: left"><?=$row->kode_produk?></td>
 
                 <td style="text-align: left"><?=$row->nama_produk?></td>
-                <td>Rp. <?=number_format($row->harga)?></td>
+                <td>Rp<?=number_format($row->harga,0, ",",".")?></td>
                 <td><?=$row->keterangan?></td>
                 <td><?=$row->nama_user?></td>
                 <td>

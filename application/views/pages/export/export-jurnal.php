@@ -25,12 +25,12 @@
     <table>
          
               <tr style="background:#e0e0e0 !important; font-weight:bold; width:100% !important">
-                <th   style="text-align: center;">Tanggal</th>
-                <th   style="text-align: center;">Keterangan</th>
-                <th   style="text-align: center;">Kode Akun</th>
-                <th   style="text-align: center;">Nama Akun</th>
-                <th   style="text-align: center;">Debit</th>
-                <th   style="text-align: center;">Kredit</th>
+                <th style="text-align: center;">Tanggal</th>
+                <th style="text-align: center;">Keterangan</th>
+                <th style="text-align: center;">Kode Akun</th>
+                <th style="text-align: center;">Nama Akun</th>
+                <th style="text-align: center;">Debit</th>
+                <th style="text-align: center;">Kredit</th>
               </tr>
               <?php
               $debit = 0;
@@ -53,8 +53,8 @@
               } ?>
               <tr style="background:#e0e0e0 !important; font-weight:bold; width:100% !important">
                 <th colspan="4">Total</th>
-                <th style="text-align: right">Rp. <?=number_format($debit) ?></th>
-                <th style="text-align: right">Rp. <?=number_format($kredit) ?></th>
+                <th style="text-align: right">Rp<?=number_format($debit,0,",",".") ?></th>
+                <th style="text-align: right">Rp<?=number_format($kredit,0,",",".") ?></th>
               </tr>
               <tr style="height: 100px !important">
 

@@ -28,7 +28,7 @@
                 <!-- <td><?=tanggal($row->tanggal_pemasukan)?></td> -->
                 <td style="text-align: left"><a href="<?php echo base_url('pemasukan/view/'.$row->id_pemasukan)?>"><?=$row->id_pemasukan?></a></td>
                 <td style="text-align: left"><?=date('d F Y', strtotime($row->tanggal_pemasukan))?></td>
-                <td style="text-align: right">Rp. <?=number_format($row->harga)?></td>
+                <td style="text-align: right">Rp<?=number_format($row->harga,0, ",",".")?></td>
                 <td style="text-align: left"><?=$row->keterangan?></td>
                 <td>
 

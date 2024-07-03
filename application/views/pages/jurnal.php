@@ -46,9 +46,9 @@
                 <td><?=$no++?></td>
                 <td><?=tanggal($row->tanggal)?></td>
                 <td style="text-align: left"><?=$row->keterangan?></td>
-                <td>Rp. <?=number_format($row->kredit)?></td>
-                <td>Rp. <?=number_format($row->debit)?></td>
-                <td>Rp. <?=number_format($saldo)?></td>
+                <td>Rp. <?=number_format($row->kredit,0, ",",".")?></td>
+                <td>Rp. <?=number_format($row->debit,0, ",",".")?></td>
+                <td>Rp. <?=number_format($saldo,0, ",",".")?></td>
               </tr>
               <?php } ?>
             </tbody>

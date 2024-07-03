@@ -23,6 +23,9 @@ class Dashboard extends CI_Controller
     //halaman awal
     public function index()
     {
+        if ( function_exists( 'date_default_timezone_set' ) ) {
+            date_default_timezone_set('Asia/Makassar');
+        }
         $data['grafik'] = $this->data->grafik();
         $data['title'] = 'Dashboard';
         $data['side'] = 'dashboard';
@@ -103,13 +106,17 @@ class Dashboard extends CI_Controller
             if($saldo < 0){
                 $saldo = $saldo * -1;
             }
+
+            if($value->kode_akun == 101){
+                $saldo = $this->db->query(" SELECT  SUM(kredit-debit) as total_ FROM tb_jurnal")->row()->total_;
+            }
             $akuns[] = [
                 'id_akun' => $value->id_akun,
                 'kode_akun' => $value->kode_akun,
                 'nama_akun' => $value->nama_akun,
                 'kategori_akun' => $value->kategori_akun,
                 'tipe_akun' => $value->tipe_akun,
-               'saldo' => $saldo ?? 0,
+                'saldo' => $saldo ?? 0,
             ];
 
        }

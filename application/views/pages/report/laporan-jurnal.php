@@ -57,13 +57,13 @@
         <table class="table table-bordered table-striped" >
             <thead>
              
-              <tr>
-                <th>Tanggal</th>
-                <th>Keterangan</th>
-                <th>Kode Akun</th>
-                <th>Nama Akun</th>
-                <th>Debit</th>
-                <th>Kredit</th>
+              <tr >
+                <th  style="text-align: center;">Tanggal</th>
+                <th  style="text-align: center;">Keterangan</th>
+                <th  style="text-align: center;">Kode Akun</th>
+                <th  style="text-align: center;">Nama Akun</th>
+                <th  style="text-align: center;">Debit</th>
+                <th  style="text-align: center;">Kredit</th>
               </tr>
             </thead>
             <tbody>

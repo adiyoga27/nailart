@@ -34,22 +34,22 @@
       
               <tr>
                 <td  style="width:5px; text-align: start; ">Kas</td>
-                <td  style="width:300px; text-align: right">Rp. <?=number_format($data['kas'],0,",",".")?></td>
+                <td  style="width:300px; text-align: right">Rp<?=number_format($data['kas'],0,",",".")?></td>
                 <td  style="width:120px; text-align: start">Modal Awal</td>
-                <td  style="width:120px; text-align: right">Rp.  <?=number_format($data['modal'],0,",",".")?></td>
+                <td  style="width:120px; text-align: right">Rp<?=number_format($data['modal'],0,",",".")?></td>
               </tr>
               <tr>
                 <td colspan="2"></td>
                 <td  style="width:120px; text-align: start">Laba Ditahan</td>
-                <td  style="width:120px; text-align: right">Rp.  <?=number_format($data['ditahan'],0,",",".")?></td>
+                <td  style="width:120px; text-align: right">Rp<?=number_format($data['ditahan'],0,",",".")?></td>
               </tr>
 
           
               <tr style="background:#e0e0e0 !important; font-weight:bold; width:100% !important">
                 <td  style="width:5px; text-align: start; ">Total Aktiva</td>
-                <th style="text-align: right">Rp. <?=number_format($data['kas'],0,",",".")?></th>
+                <th style="text-align: right">Rp<?=number_format($data['kas'],0,",",".")?></th>
                 <td  style="width:5px; text-align: start; ">Total Pasiva</td>
-                <th style="text-align: right">Rp. <?=number_format($data['modal'] + $data['ditahan'],0,",",".")?></th>
+                <th style="text-align: right">Rp<?=number_format($data['modal'] + $data['ditahan'],0,",",".")?></th>
               </tr>
               <tr style="height: 100px !important">
 

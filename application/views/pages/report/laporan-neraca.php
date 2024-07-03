@@ -69,22 +69,22 @@
               </tr>
               <tr>
                 <td>Kas</td>
-                <td>Rp. <?=number_format($data['kas'],0,",",".")?></td>
+                <td>Rp<?=number_format($data['kas'],0,",",".")?></td>
                 <td>Modal Awal</td>
-                <td>Rp. <?=number_format($data['modal'],0,",",".")?></td>
+                <td>Rp<?=number_format($data['modal'],0,",",".")?></td>
               </tr>
               <tr>
               
                 <td colspan="2"></td>
                 <td>Laba Ditahan</td>
-                <td>Rp. <?=number_format($data['ditahan'],0,",",".")?></td>
+                <td>Rp<?=number_format($data['ditahan'],0,",",".")?></td>
               </tr>
               <tr  style="font-weight: bold;">
               
               <td>Total Aktiva</td>
-              <td>Rp. <?=number_format($data['kas'],0,",",".")?></td>
+              <td>Rp<?=number_format($data['kas'],0,",",".")?></td>
               <td>Total Pasiva</td>
-              <td>Rp. <?=number_format($data['modal'] + $data['ditahan'],0,",",".")?></td>
+              <td>Rp<?=number_format($data['modal'] + $data['ditahan'],0,",",".")?></td>
             </tr>
             </tbody>
           </table>

@@ -56,11 +56,11 @@
         <div class="box-body">
     <table class="table table-sm table-dark">
     <thead>
-              <th width="1%">No</th>
-              <th>Tanggal</th>
-              <th>Keterangan</th>
-              <th>Kas Masuk</th>
-              <th>Kas Keluar</th>
+              <th width="5%"  style="text-align: center;">No</th>
+              <th  style="text-align: center;">Tanggal</th>
+              <th  style="text-align: center;">Keterangan</th>
+              <th width="15%"  style="text-align: center;">Kas Masuk</th>
+              <th width="15%"  style="text-align: center;">Kas Keluar</th>
             </thead>
             <tbody>
               <?php
@@ -74,20 +74,20 @@
                 <td><?=$no++?></td>
                 <td><?=tanggal($row->tanggal)?></td>
                 <td style="text-align: left"><?=$row->keterangan?></td>
-                <td>Rp. <?=number_format($row->kredit)?></td>
-                <td>Rp. <?=number_format($row->debit)?></td>
+                <td style="text-align: end">Rp<?=number_format($row->kredit,0,",",".")?></td>
+                <td style="text-align: end">Rp<?=number_format($row->debit,0,",",".")?></td>
               </tr>
               <?php } ?>
             </tbody>
             <tfoot>
                   <tr>
-                    <th colspan="3">Total</th>
-                    <th style="text-align: end;">Rp. <?=number_format($kredit,0,",",".")?></th>
-                    <th style="text-align: end;">Rp. <?=number_format($debit,0,",",".")?></th>
+                    <th colspan="3"  style="text-align: end">Total</th>
+                    <th style="text-align: end;">Rp<?=number_format($kredit,0,",",".")?></th>
+                    <th style="text-align: end;">Rp<?=number_format($debit,0,",",".")?></th>
                   </tr>
                   <tr>
-                    <th colspan="3">Total Kas Bersih</th>
-                    <th  colspan="2" style="text-align: center;">Rp. <?=number_format($saldo,0,",",".")?></th>
+                    <th colspan="3"  style="text-align: end">Total Kas Bersih</th>
+                    <th  colspan="3" style="text-align: center;">Rp<?=number_format($saldo,0,",",".")?></th>
                   </tr>
             </tfoot>
             </table>

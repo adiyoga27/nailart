@@ -27,7 +27,7 @@
                 <td><?=$no++?></td>
                 <td><?=tanggal($row->tanggal_transaksi)?></td>
                 <td style="text-align: left"><?=$row->keterangan?></td>
-                <td style="text-align: right">Rp. <?=number_format($row->jumlah)?></td>
+                <td style="text-align: right">Rp<?=number_format($row->jumlah,0, ",",".")?></td>
                 <td style="text-align: left"><?=$row->nama_user?></td>
                 <td>
 

@@ -28,12 +28,12 @@
     <p style="text-align: center; margin-top:-10px"><b>Periode : <?php echo date('01-m-Y', strtotime($year."-".$month."-01"))?> s/d <?php echo date('t-m-Y', strtotime($year."-".$month."-01"))?></b></p>
 
     <table >
-    <tr style="background:#e0e0e0 !important; font-weight:bold;">
-              <th style="width: 50px;">No</th>
-              <th style="width: 100px;">  <col width="100"> Tanggal</th>
-              <th style="width: 300px;">Keterangan</th>
-              <th  style="width: 100px;">Kas Masuk</th>
-              <th  style="width: 100px;">Kas Keluar</th>
+    <tr style="background:#e0e0e0; font-weight:bold;">
+              <th style="width: 20px; text-align: center;" ><col width="10">No</th>
+              <th style="width: 100px; text-align: center;" >  <col width="150"> Tanggal</th>
+              <th style="width: 300px; text-align: center;" >Keterangan</th>
+              <th style="width: 100px; text-align: center;" >Kas Masuk</th>
+              <th style="width: 100px; text-align: center;" >Kas Keluar</th>
             </tr>
               <?php
               $saldo =  $debit = $kredit = 0;
@@ -46,18 +46,18 @@
                 <td><?=$no++?></td>
                 <td><?=tanggal($row->tanggal)?></td>
                 <td style="text-align: left"><?=$row->keterangan?></td>
-                <td style="text-align: right">Rp. <?=number_format($row->kredit,0,",",".")?></td>
-                <td style="text-align: right">Rp. <?=number_format($row->debit,0,",",".")?></td>
+                <td style="text-align: right">Rp<?=number_format($row->kredit,0,",",".")?></td>
+                <td style="text-align: right">Rp<?=number_format($row->debit,0,",",".")?></td>
               </tr>
               <?php } ?>
                   <tr style="background:#e0e0e0 !important; font-weight:bold;">
                     <th colspan="3">Total</th>
-                    <th style="text-align: right;">Rp. <?=number_format($kredit,0,",",".")?></th>
-                    <th style="text-align: right;">Rp. <?=number_format($debit,0,",",".")?></th>
+                    <th style="text-align: right;">Rp<?=number_format($kredit,0,",",".")?></th>
+                    <th style="text-align: right;">Rp<?=number_format($debit,0,",",".")?></th>
                   </tr>
                   <tr style="background:#e0e0e0 !important; font-weight:bold;">
                     <th colspan="3">Total Kas Bersih</th>
-                    <th  colspan="2" style="text-align: center;">Rp. <?=number_format($saldo,0,",",".")?></th>
+                    <th  colspan="2" style="text-align: center;">Rp<?=number_format($saldo,0,",",".")?></th>
                   </tr>
 
                   

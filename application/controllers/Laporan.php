@@ -46,8 +46,10 @@ class Laporan extends CI_Controller {
 						->join('akun','jurnal.akun = akun.id_akun')
 						->where('MONTH(tb_jurnal.tanggal)',$month)
 						->where('YEAR(tb_jurnal.tanggal)',$year)
-						->where_in('akun.kategori_akun', ['modal', 'beban', 'prive', 'pendapatan'])
+						->where_in('akun.kategori_akun', ['beban', 'prive', 'pendapatan'])
 						->order_by('jurnal.tanggal', 'asc')
+						->order_by('jurnal.id_jurnal','ASC')
+
 						->get()->result();
 					
 			$data['data']	= $results;
@@ -91,6 +93,8 @@ class Laporan extends CI_Controller {
 						->where('MONTH(tb_jurnal.tanggal)',$month)
 						->where('YEAR(tb_jurnal.tanggal)',$year)
 						->order_by('tb_jurnal.tanggal','ASC')
+						->order_by('tb_jurnal.id_jurnal','ASC')
+
 						->get()->result();
 
 						$previousDate = null;

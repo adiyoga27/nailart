@@ -11,16 +11,16 @@ class Laporan extends CI_Controller {
 
 	public function arus_kas()
 	{
-		$month = date('m');
-		$year = date('Y');
-		if ($this->input->post('button') == 'filter' ) {
+	
+		$startDate = date('Y-m-d');
+		$endDate = date('Y-m-d');
+		if ($this->input->post('button') == 'filter' ||  $this->input->post('button') == 'cetak' ) {
 
-			$month	= $this->input->post('month') ?? $month;
-			$year	= $this->input->post('year')  ?? $year;
+			$startDate	= $this->input->post('startDate') ?? $startDate;
+			$endDate	= $this->input->post('endDate')  ?? $endDate;
 		
-
+			
 		}
-		
 		
 			// $akuns = $this->data->tipeAkun()->result();
 			// foreach ($akuns as $akun) { 
@@ -44,8 +44,8 @@ class Laporan extends CI_Controller {
 			// }
 			$results = $this->db->from('jurnal')
 						->join('akun','jurnal.akun = akun.id_akun')
-						->where('MONTH(tb_jurnal.tanggal)',$month)
-						->where('YEAR(tb_jurnal.tanggal)',$year)
+						->where('tb_jurnal.tanggal >=',$startDate)
+						->where('tb_jurnal.tanggal <=',$endDate)
 						->where_in('akun.kategori_akun', ['beban', 'prive', 'pendapatan'])
 						->order_by('jurnal.tanggal', 'asc')
 						->order_by('jurnal.id_jurnal','ASC')
@@ -56,8 +56,8 @@ class Laporan extends CI_Controller {
 			$data['title'] 	= 'Laporan Arus Kas';
 			$data['side'] 	= 'kas';
 			$data['page'] 	= 'pages/report/laporan-kas';
-			$data['month'] = $month;
-						$data['year'] = $year;
+			$data['startDate'] = $startDate;
+			$data['endDate'] = $endDate;
 			if ($this->input->post('button') == 'cetak' ) {
 				ob_start();
 				$this->load->view('pages/export/export-kas', $data);
@@ -79,24 +79,24 @@ class Laporan extends CI_Controller {
 
 	public function jurnal()
 	{
-		$month = date('m');
-		$year = date('Y');
-		if ($this->input->post('button') == 'filter' ) {
+		$startDate = date('Y-m-d');
+		$endDate = date('Y-m-d');
+		if ($this->input->post('button') == 'filter' ||  $this->input->post('button') == 'cetak' ) {
 
-			$month	= $this->input->post('month') ?? $month;
-			$year	= $this->input->post('year')  ?? $year;
+			$startDate	= $this->input->post('startDate') ?? $startDate;
+			$endDate	= $this->input->post('endDate')  ?? $endDate;
 		
-
+			
 		}
 		$jurnals = $this->db->from('jurnal')
 						->join('akun','jurnal.akun = akun.id_akun')
-						->where('MONTH(tb_jurnal.tanggal)',$month)
-						->where('YEAR(tb_jurnal.tanggal)',$year)
+						->where('tb_jurnal.tanggal >=',$startDate)
+						->where('tb_jurnal.tanggal <=',$endDate)
 						->order_by('tb_jurnal.tanggal','ASC')
 						->order_by('tb_jurnal.id_jurnal','ASC')
 
 						->get()->result();
-
+					
 						$previousDate = null;
 						foreach ($jurnals as $value) {
 							// if($previousDate == null || $value->tanggal != $previousDate){
@@ -135,15 +135,17 @@ class Laporan extends CI_Controller {
 								);
 							}
 						}
-						$data['month'] = $month;
-						$data['year'] = $year;
+						$data['startDate'] = $startDate;
+						$data['endDate'] = $endDate;
 						$data['data']	= $results;
 						$data['title'] 	= 'Laporan Jurnal Umum';
 						$data['side'] 	= 'jurnal';
 						$data['page'] 	= 'pages/report/laporan-jurnal';
+						
 					if ($this->input->post('button') == 'cetak' ) {
 
 						ob_start();
+					
 						$this->load->view('pages/export/export-jurnal', $data);
 						$html = ob_get_contents();
 						ob_end_clean();
@@ -166,14 +168,14 @@ class Laporan extends CI_Controller {
 	public function labarugi()
 	{
 
-		$month = date('m');
-		$year = date('Y');
-		if ($this->input->post('button') == 'filter' ) {
+		$startDate = date('Y-m-d');
+		$endDate = date('Y-m-d');
+		if ($this->input->post('button') == 'filter' ||  $this->input->post('button') == 'cetak' ) {
 
-			$month	= $this->input->post('month') ?? $month;
-			$year	= $this->input->post('year')  ?? $year;
+			$startDate	= $this->input->post('startDate') ?? $startDate;
+			$endDate	= $this->input->post('endDate')  ?? $endDate;
 		
-
+			
 		}
 		
 		
@@ -186,8 +188,8 @@ class Laporan extends CI_Controller {
 						->from('akun')
 						->join('jurnal', 'akun.id_akun = jurnal.akun')
 						->where('kategori_akun', $c)
-						->where('MONTH(tb_jurnal.tanggal)',$month)
-						->where('YEAR(tb_jurnal.tanggal)',$year)
+						->where('tb_jurnal.tanggal >= ',$startDate)
+						->where('tb_jurnal.tanggal <=',$endDate)
 						->group_by('jurnal.akun')
 						->order_by('kode_akun', 'asc')
 						->get()->result();
@@ -245,8 +247,8 @@ class Laporan extends CI_Controller {
 			$data['title'] 	= 'Laporan Laba Rugi';
 			$data['side'] 	= 'labarugi';
 			$data['page'] 	= 'pages/report/laporan-labarugi';
-			$data['month'] = $month;
-						$data['year'] = $year;
+			$data['startDate'] = $startDate;
+						$data['endDate'] = $endDate;
 			if ($this->input->post('button') == 'cetak' ) {
 				ob_start();
 				$this->load->view('pages/export/export-labarugi', $data);
@@ -267,40 +269,40 @@ class Laporan extends CI_Controller {
 
 	public function neraca()
 	{
-		$month = date('m');
-		$year = date('Y');
-		
-		if ($this->input->post('button') == 'filter' ) {
+		$startDate = date('Y-m-d');
+		$endDate = date('Y-m-d');
+		if ($this->input->post('button') == 'filter' ||  $this->input->post('button') == 'cetak' ) {
 
-			$month = $this->input->post('month') ?? $month;
-			$year = $this->input->post('year') ?? $year;
+			$startDate	= $this->input->post('startDate') ?? $startDate;
+			$endDate	= $this->input->post('endDate')  ?? $endDate;
+		
+			
 		}
 
-		$dateBefore = date('Y-m-t', strtotime($year."-".$month."-01"));
 
 		$result = array(
 			'kas' => $this->db->select('(sum(kredit) - sum(debit)) as kas')
 						->from('jurnal')
-						->where('MONTH(tb_jurnal.tanggal)',$month)
-						->where('YEAR(tb_jurnal.tanggal)',$year)
+						->where('tb_jurnal.tanggal >=',$startDate)
+						->where('tb_jurnal.tanggal <=',$endDate)
 						->get()->row()->kas ?? 0,
 			'modal' => $this->db->select('(sum(kredit) - sum(debit)) as modal')
 						->from('jurnal')
 						->join('akun', 'jurnal.akun = akun.id_akun')
 						->where('kategori_akun','modal')
-						->where('MONTH(tb_jurnal.tanggal)',$month)
-						->where('YEAR(tb_jurnal.tanggal)',$year)
+						->where('tb_jurnal.tanggal >=',$startDate)
+						->where('tb_jurnal.tanggal <=',$endDate)
 						->get()->row()->modal ?? 0,
 			'ditahan' => $this->db->select('(sum(kredit) - sum(debit)) as ditahan')
 						->from('jurnal')
 						->join('akun', 'jurnal.akun = akun.id_akun')
 						->where_in('kategori_akun',['pendapatan', 'beban', 'prive'])
-						->where('MONTH(tb_jurnal.tanggal)',$month)
-						->where('YEAR(tb_jurnal.tanggal)',$year)
+						->where('tb_jurnal.tanggal >=',$startDate)
+						->where('tb_jurnal.tanggal <=',$endDate)
 						->get()->row()->ditahan ?? 0
 		);
-		$data['month']	= $month;
-		$data['year']	= $year;
+		$data['startDate']	= $startDate;
+		$data['endDate']	= $endDate;
 		$data['data']	= $result; 
 		$data['title'] 	= 'Laporan Neraca';
 		$data['side'] 	= 'neraca';
@@ -329,20 +331,23 @@ class Laporan extends CI_Controller {
 	public function perubahan_modal()
 	{
 		
-		$month = date('m');
-		$year = date('Y');
-		if ($this->input->post('button') == 'filter' ) {
-			$month = $this->input->post('month');
-			$year = $this->input->post('year');
+		$startDate = date('Y-m-d');
+		$endDate = date('Y-m-d');
+		if ($this->input->post('button') == 'filter' ||  $this->input->post('button') == 'cetak' ) {
+
+			$startDate	= $this->input->post('startDate') ?? $startDate;
+			$endDate	= $this->input->post('endDate')  ?? $endDate;
+		
+			
 		}
-		$result = $this->data->perubahanModal($month,$year)->result();
+		$result = $this->data->perubahanModal($startDate,$endDate)->result();
 
 			$data['data']	= $result;
 			$data['title'] 	= 'Laporan Perubahan Modal';
 			$data['side'] 	= 'perubahan-modal';
 			$data['page'] 	= 'pages/report/laporan-modal';
-			$data['month'] = $month;
-			$data['year'] = $year;
+			$data['startDate'] = $startDate;
+			$data['endDate'] = $endDate;
 
 			if ($this->input->post('button') == 'cetak' ) {
 				ob_start();

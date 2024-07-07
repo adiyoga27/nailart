@@ -25,7 +25,7 @@
     <hr>
     <br>
     <p style="text-align: center; margin-top:-10px"><b>Laporan Arus Kas</b></p>
-    <p style="text-align: center; margin-top:-10px"><b>Periode : <?php echo date('01-m-Y', strtotime($year."-".$month."-01"))?> s/d <?php echo date('t-m-Y', strtotime($year."-".$month."-01"))?></b></p>
+    <p style="text-align: center; margin-top:-10px"><b>Periode : <?php echo date('d-m-Y', strtotime($startDate)); ?> s/d <?php echo date('d-m-Y', strtotime($endDate)); ?></b></p>
 
     <table >
     <tr style="background:#e0e0e0; font-weight:bold;">

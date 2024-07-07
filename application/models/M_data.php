@@ -84,13 +84,13 @@ class M_data extends CI_Model {
 				->get();
 	}
 
-	public function perubahanModal($month, $year) {
+	public function perubahanModal($startDate, $endDate) {
 	
 		return $this->db->select('akun.kategori_akun as kategori_akun, sum(debit) as debit, sum(kredit) as kredit')
 				->from('jurnal')
 				->join('akun','akun.id_akun = jurnal.akun')
-				->where('MONTH(tanggal)',$month)
-				->where('YEAR(tanggal)',$year)
+				->where('tanggal >=',$startDate)
+				->where('tanggal <=',$endDate)
 				->where_in('kategori_akun', ['modal', 'beban', 'prive', 'pendapatan'])
 				->group_by('akun.kategori_akun')
 				->get();

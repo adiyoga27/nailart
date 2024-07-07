@@ -21,7 +21,7 @@
     <hr>
     <br>
     <p style="text-align: center; margin-top:-10px"><b>Laporan Jurnal Umum</b></p>
-    <p style="text-align: center; margin-top:-10px"><b>Periode : <?php echo date('d-m-Y', strtotime($year."-".$month."-01")); ?> s/d <?php echo date('t-m-Y', strtotime($year."-".$month."-01")); ?></b></p>
+    <p style="text-align: center; margin-top:-10px"><b>Periode : <?php echo date('d-m-Y', strtotime($startDate)); ?> s/d <?php echo date('d-m-Y', strtotime($endDate)); ?></b></p>
     <table>
          
               <tr style="background:#e0e0e0 !important; font-weight:bold; width:100% !important">

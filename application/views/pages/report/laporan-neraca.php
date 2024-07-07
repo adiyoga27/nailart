@@ -8,34 +8,18 @@
           
           <form method="post" action="">
           <div class="row">
-            <div class="col-md-3">
+          <div class="col-md-3">
               <div class="form-group">
-                <label>Bulan</label>
-                <select name="month" class="form-control">
-                  <option value="1" <?php echo ($month == 1 ? 'selected' : '')?>>Januari</option>
-                  <option value="2" <?php echo ($month == 2 ? 'selected' : '')?>>Februari</option>
-                  <option value="3" <?php echo ($month == 3 ? 'selected' : '')?>>Maret</option>
-                  <option value="4" <?php echo ($month == 4 ? 'selected' : '')?>>April</option>
-                  <option value="5" <?php echo ($month == 5 ? 'selected' : '')?>>Mei</option>
-                  <option value="6" <?php echo ($month == 6 ? 'selected' : '')?>>Juni</option>
-                  <option value="7" <?php echo ($month == 7 ? 'selected' : '')?>>Juli</option>
-                  <option value="8" <?php echo ($month == 8 ? 'selected' : '')?>>Agustus</option>
-                  <option value="9" <?php echo ($month == 9 ? 'selected' : '')?>>September</option>
-                  <option value="10" <?php echo ($month == 10 ? 'selected' : '')?>>Oktober</option>
-                  <option value="11" <?php echo ($month == 11 ? 'selected' : '')?>>November</option>
-                  <option value="12" <?php echo ($month == 12 ? 'selected' : '')?>>Desember</option>
-                </select>
+                <label>Tgl Mulai</label>
+                <input class="form-control" type="date" name="startDate" value="<?php echo $startDate?>" required>
+               
               </div>
             </div>
-
             <div class="col-md-3">
               <div class="form-group">
-                <label>Tahun</label>
-                <select name="year" class="form-control"> 
-                  <option value="2023"  <?php echo ($year == 2023 ? 'selected' : '')?>>2023</option>
-                  <option  value="2024" <?php echo ($year == 2024 ? 'selected' : '')?>>2024</option>
-                </select>
-
+                <label>Tgl Selesai</label>
+                <input class="form-control" type="date" name="endDate" value="<?php echo $endDate?>" required>
+               
               </div>
             </div>
 

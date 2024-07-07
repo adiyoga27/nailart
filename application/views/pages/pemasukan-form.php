@@ -77,7 +77,7 @@
                                         <th width="10%">Kuantitas</th>
                                         <th width="30%">Harga</th>
                                         <th width="10%">Subtotal</th>
-                                        <th>Action</th>
+                                        <th width="5%">Action</th>
                                     </thead>
                                     <tbody class="input-warp">
                                         <tr class="row-input">
@@ -93,15 +93,17 @@
                                                 <select>
                                             </td>
                                             <td><input type="number"
-                                                    class="form-control table-input jumlah quantity-field"
+                                                    class="form-control table-input jumlah quantity-field "
                                                     min="1" step="any" name="jumlah[]" value=""
                                                     autocomplete='false' required />
                                             </td>
-                                            <td><input type="number" class="form-control harga table-input harga-field"
-                                                    name="harga[]" value="" required /> </td>
+                                            <td style="display:none;"><input type="number" class="form-control harga table-input harga-field" 
+                                                    name="harga[]" value="" readonly required /> </td>
+                                            <td><input type="number" class="form-control harga view-harga table-input"
+                                                     value="" readonly required /> </td>
                                             <td><input type="text"
                                                     class="form-control table-input total subtotal-field"
-                                                    maxlength="100" name="total[]" value="" required />
+                                                    maxlength="100" name="total[]" readonly value="" required />
                                             </td>
                                             <td>
                                                 <a class="btn btn-sm btn-danger remove-row">-</a>
@@ -111,6 +113,29 @@
                                 </table>
                                 <a class="btn btn-sm btn-success btn_tambah"><i class="zmdi zmdi-plus"></i>+ Tambah
                                     Produk</a>
+
+                                <br>
+                                <div class="row right">
+                                    <div class="form-group col-md-9"></div>
+                                    <div class="form-group col-md-3">
+                                            <label>Total Pembelanjaan</label>
+                                            <input type="text" name="totalBayar"  readonly
+                                                class="form-control total-sum-field">
+                                    </div>
+                                    <div class="form-group col-md-9"></div>
+                                    <div class="form-group col-md-3">
+                                            <label>Jumlah Pembayaran</label>
+                                            <input type="text" name="bayar" 
+                                                class="form-control uang">
+                                    </div>
+                                    <div class="form-group col-md-9"></div>
+                                    <div class="form-group col-md-3">
+                                            <label>Sisa</label>
+                                            <input type="text" name="kembalian" readonly
+                                                class="form-control sisa">
+                                    </div>
+                                </div>
+                            
                             </div>
                         </div>
                     </div>
@@ -127,6 +152,7 @@
 <script src="<?= base_url('assets/') ?>plugins/jQuery/jQuery-2.1.4.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
+ 
     $(document).on("click", ".btn_tambah", function(e) {
         e.stopPropagation();
         e.preventDefault();
@@ -151,8 +177,10 @@
             success: function(response) {
 
                 // Set the harga value in the corresponding row
-                row.find(".harga").val(response.data.harga);
+                var harga = response.data.harga;
+                 // Format harga using toLocaleString() and replace commas with dots
 
+                row.find(".harga").val(harga);
             },
             error: function(xhr, status, error) {
                 console.error("Error fetching data from API:", error);
@@ -160,16 +188,35 @@
         });
 
     });
+    $(document).on("change", ".uang", function() {
+        var pembayaran = parseFloat($(this).val().replace(/\./g, ''));
+        var total = parseFloat($('.total-sum-field').val().replace(/\./g, ''));
+        var sisa = pembayaran-total;
+        $(".sisa").val(numberWithCommas(sisa));
+    });
     $(document).on("change", ".quantity-field", function() {
         var quantity = parseFloat($(this).val());
         var harga = parseFloat($(this).closest(".row-input").find(".harga-field").val());
         if (!isNaN(quantity) && !isNaN(harga)) {
             var subtotal = quantity * harga;
-            $(this).closest(".row-input").find(".subtotal-field").val(subtotal);
+            $(this).closest(".row-input").find(".subtotal-field").val(numberWithCommas(subtotal));
+            $(this).closest(".row-input").find(".view-harga").val(numberWithCommas(harga));
+
         } else {
             // Jika jumlah atau harga tidak valid, kosongkan subtotal
             $(this).closest(".row-input").find(".subtotal-field").val('');
         }
+
+        var totalSum = 0;
+        $(".subtotal-field").each(function() {
+            var subtotalValue = parseFloat($(this).val().replace(/\./g, ''));
+            if (!isNaN(subtotalValue)) {
+                totalSum += subtotalValue;
+            }
+        });
+
+        // Display the total sum
+        $(".total-sum-field").val(numberWithCommas(totalSum));
     });
     $(document).on("click", ".remove-row", function(e) {
         e.stopPropagation();
@@ -179,4 +226,32 @@
             $(this).parent().parent().remove();
         }
     });
+
+    function numberWithCommas(x) {
+        return x.toLocaleString('en-US').replace(/,/g, '.');
+    }
+    $(document).ready(function() {
+        // Event listener for keyup on elements with class 'tanpa_rupiah'
+        $('.uang').keyup(function(e) {
+            // Call formatRupiah function and update the value of the input field
+            $(this).val(formatRupiah($(this).val()));
+        });
+    });
+    /* Fungsi */
+    function formatRupiah(angka, prefix)
+    {
+        var number_string = angka.replace(/[^,\d]/g, '').toString(),
+            split    = number_string.split(','),
+            sisa     = split[0].length % 3,
+            rupiah     = split[0].substr(0, sisa),
+            ribuan     = split[0].substr(sisa).match(/\d{3}/gi);
+            
+        if (ribuan) {
+            separator = sisa ? '.' : '';
+            rupiah += separator + ribuan.join('.');
+        }
+        
+        rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+        return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
+    }
 </script>

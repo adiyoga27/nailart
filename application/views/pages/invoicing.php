@@ -107,6 +107,22 @@ $total += $value->total;
                                                                     <h4 class="m-0">Rp<?=number_format($total, 0,",",".")?></h4>
                                                                 </td>
                                                             </tr>
+                                                            <tr>
+                                                                <td colspan="4" class="border-0 text-end">
+                                                                    <strong>Pembayaran</strong>
+                                                                </td>
+                                                                <td class="border-0 text-end">
+                                                                    <h4 class="m-0">Rp<?=number_format($value->bayar, 0,",",".")?></h4>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td colspan="4" class="border-0 text-end">
+                                                                    <strong>Sisa</strong>
+                                                                </td>
+                                                                <td class="border-0 text-end">
+                                                                    <h4 class="m-0">Rp<?=number_format($value->kembalian, 0,",",".")?></h4>
+                                                                </td>
+                                                            </tr>
                                                         </tbody>
                                                     </table>
                                                 </div>

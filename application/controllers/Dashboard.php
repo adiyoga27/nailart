@@ -437,9 +437,9 @@ class Dashboard extends CI_Controller
                     $this->db->insert('pemasukan_detail', [
                         'id_pemasukan' => $kode,
                         'produk' => $p['id_produk'][$i],
-                        'harga' => $p['harga'][$i],
+                        'harga' => str_replace('.', '',$p['harga'][$i]),
                         'qty' => $p['jumlah'][$i],
-                        'total' => $p['total'][$i],
+                        'total' => str_replace('.', '',$p['total'][$i]),
                     ]);
                     // $produk = $this->data->produk($p['id_produk'][$i])->row();
 
@@ -462,7 +462,8 @@ class Dashboard extends CI_Controller
                     'tanggal_pemasukan' => $p['tanggal_pemasukan'],
                     'keterangan' => $p['keterangan'],
                     // 'invoice' => $upload['file_name'],
-                    
+                    'bayar' => str_replace('.', '',$p['bayar']),
+                    'kembalian' => str_replace('.', '',$p['kembalian']),
                     'customer_nama' => $p['customer_nama'],
                     'customer_phone' => $p['customer_phone'],
                     'user' => $this->session->userdata('kode'),
@@ -497,15 +498,15 @@ class Dashboard extends CI_Controller
 
                 $total = 0;
                 for ($i = 0; $i < count($p['id_produk']); $i++) {
-                    $total += $p['total'][$i];
+                    $total += str_replace('.', '',$p['total'][$i]);
 
                     //Pemasukkan Detail
                     $this->db->insert('pemasukan_detail', [
                         'id_pemasukan' => $p['kode'],
                         'produk' => $p['id_produk'][$i],
-                        'harga' => $p['harga'][$i],
+                        'harga' => str_replace('.', '',$p['harga'][$i]),
                         'qty' => $p['jumlah'][$i],
-                        'total' => $p['total'][$i],
+                        'total' => str_replace('.', '',$p['total'][$i]),
                     ]);
                     $produk = $this->data->produk($p['id_produk'][$i])->row();
 
@@ -527,7 +528,8 @@ class Dashboard extends CI_Controller
                     'harga' => $total,
                     'tanggal_pemasukan' => $p['tanggal_pemasukan'],
                     'keterangan' => $p['keterangan'],
-                    
+                    'bayar' => str_replace('.', '',$p['bayar']),
+                    'kembalian' => str_replace('.', '',$p['kembalian']),
                     'customer_nama' => $p['customer_nama'],
                     'customer_phone' => $p['customer_phone'],
                     'user' => $this->session->userdata('kode'),

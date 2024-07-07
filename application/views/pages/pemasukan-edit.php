@@ -100,15 +100,18 @@
                                                     min="1" step="any" name="jumlah[]" value="<?php echo $d->qty?>"
                                                     autocomplete='false' required />
                                             </td>
-                                            <td><input type="number" class="form-control harga table-input harga-field"
+                                            <td style="display:none;"><input type="number" class="form-control harga table-input harga-field"
                                                     name="harga[]" value="<?php echo $d->harga?>" required /> </td>
+                                                    <td><input type="number" class="form-control harga view-harga table-input"
+                                                    value="<?php echo number_format($d->harga,0,",",".")?>" readonly required /> </td>
                                             <td><input type="text"
                                                     class="form-control table-input total subtotal-field"
-                                                    maxlength="100" name="total[]" value="<?php echo $d->total?>" required />
+                                                    maxlength="100" readonly name="total[]" value="<?php echo number_format($d->total,0,",",".")?>" required />
                                             </td>
                                             <td>
                                                 <a class="btn btn-sm btn-danger remove-row">-</a>
                                             </td>
+                                            
                                         </tr>
                                         <?php 
 
@@ -119,6 +122,27 @@
                                 </table>
                                 <a class="btn btn-sm btn-success btn_tambah"><i class="zmdi zmdi-plus"></i>+ Tambah
                                     Produk</a>
+                                    <br>
+                                <div class="row right">
+                                    <div class="form-group col-md-9"></div>
+                                    <div class="form-group col-md-3">
+                                            <label>Total Pembelanjaan</label>
+                                            <input type="text" name="totalBayar" value="<?php echo number_format($data->harga,0,",",".")?>"  readonly
+                                                class="form-control total-sum-field">
+                                    </div>
+                                    <div class="form-group col-md-9"></div>
+                                    <div class="form-group col-md-3">
+                                            <label>Jumlah Pembayaran</label>
+                                            <input type="text" name="bayar"   value="<?php echo number_format($data->bayar,0,",",".")?>" 
+                                                class="form-control uang">
+                                    </div>
+                                    <div class="form-group col-md-9"></div>
+                                    <div class="form-group col-md-3">
+                                            <label>Sisa</label>
+                                            <input type="text" name="kembalian"  value="<?php echo number_format($data->kembalian,0,",",".")?>"  readonly
+                                                class="form-control sisa">
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -168,16 +192,34 @@
         });
 
     });
+    $(document).on("change", ".uang", function() {
+        var pembayaran = parseFloat($(this).val().replace(/\./g, ''));
+        var total = parseFloat($('.total-sum-field').val().replace(/\./g, ''));
+        var sisa = pembayaran-total;
+        $(".sisa").val(numberWithCommas(sisa));
+    });
     $(document).on("change", ".quantity-field", function() {
         var quantity = parseFloat($(this).val());
         var harga = parseFloat($(this).closest(".row-input").find(".harga-field").val());
         if (!isNaN(quantity) && !isNaN(harga)) {
             var subtotal = quantity * harga;
-            $(this).closest(".row-input").find(".subtotal-field").val(subtotal);
+            $(this).closest(".row-input").find(".subtotal-field").val(numberWithCommas(subtotal));
+            $(this).closest(".row-input").find(".view-harga").val(numberWithCommas(harga));
         } else {
             // Jika jumlah atau harga tidak valid, kosongkan subtotal
             $(this).closest(".row-input").find(".subtotal-field").val('');
         }
+
+        var totalSum = 0;
+        $(".subtotal-field").each(function() {
+            var subtotalValue = parseFloat($(this).val().replace(/\./g, ''));
+            if (!isNaN(subtotalValue)) {
+                totalSum += subtotalValue;
+            }
+        });
+
+        // Display the total sum
+        $(".total-sum-field").val(numberWithCommas(totalSum));
     });
     $(document).on("click", ".remove-row", function(e) {
         e.stopPropagation();
@@ -187,4 +229,30 @@
             $(this).parent().parent().remove();
         }
     });
+    function numberWithCommas(x) {
+        return x.toLocaleString('en-US').replace(/,/g, '.');
+    }
+    $(document).ready(function() {
+        // Event listener for keyup on elements with class 'tanpa_rupiah'
+        $('.uang').keyup(function(e) {
+            // Call formatRupiah function and update the value of the input field
+            $(this).val(formatRupiah($(this).val()));
+        });
+    });
+    function formatRupiah(angka, prefix)
+    {
+        var number_string = angka.replace(/[^,\d]/g, '').toString(),
+            split    = number_string.split(','),
+            sisa     = split[0].length % 3,
+            rupiah     = split[0].substr(0, sisa),
+            ribuan     = split[0].substr(sisa).match(/\d{3}/gi);
+            
+        if (ribuan) {
+            separator = sisa ? '.' : '';
+            rupiah += separator + ribuan.join('.');
+        }
+        
+        rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+        return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
+    }
 </script>

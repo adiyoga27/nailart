@@ -431,7 +431,7 @@ class Dashboard extends CI_Controller
 
                 $total = 0;
                 for ($i = 0; $i < count($p['id_produk']); $i++) {
-                    $total += $p['total'][$i];
+                    $total += str_replace('.', '',$p['total'][$i]);
 
                     //Pemasukkan Detail
                     $this->db->insert('pemasukan_detail', [
@@ -458,7 +458,7 @@ class Dashboard extends CI_Controller
                 $this->db->insert('pemasukan', [
                     'id_pemasukan' => $kode,
                     'akun' => $p['akun'],
-                    'harga' => $total,
+                    'harga' => str_replace('.', '',$total),
                     'tanggal_pemasukan' => $p['tanggal_pemasukan'],
                     'keterangan' => $p['keterangan'],
                     // 'invoice' => $upload['file_name'],
@@ -525,7 +525,7 @@ class Dashboard extends CI_Controller
                 $data = [
                     'id_pemasukan' => $p['kode'],
                     'akun' => $p['akun'],
-                    'harga' => $total,
+                    'harga' => str_replace('.', '',$total),
                     'tanggal_pemasukan' => $p['tanggal_pemasukan'],
                     'keterangan' => $p['keterangan'],
                     'bayar' => str_replace('.', '',$p['bayar']),

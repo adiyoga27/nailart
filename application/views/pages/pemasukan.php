@@ -16,7 +16,7 @@
             <thead>
               <th width="1%">No</th>
               <th>Kode Transaksi</th>
-              <th>Tgl</th>
+              <th>Tanggal</th>
               <th>Total</th> 
               <th>Keterangan</th>
               <th>Aksi</th>
@@ -27,8 +27,8 @@
                 <td><?=$no++?></td>
                 <!-- <td><?=tanggal($row->tanggal_pemasukan)?></td> -->
                 <td style="text-align: left"><a href="<?php echo base_url('pemasukan/view/'.$row->id_pemasukan)?>"><?=$row->id_pemasukan?></a></td>
-                <td style="text-align: left"><?=date('d F Y', strtotime($row->tanggal_pemasukan))?></td>
-                <td style="text-align: right">Rp<?=number_format($row->harga,0, ",",".")?></td>
+                <td style="text-align: left"><?=convertDateIndo(date('Y-m-d', strtotime($row->tanggal_pemasukan)))?></td>
+                <td style="text-align: left">Rp<?=number_format($row->harga,0, ",",".")?></td>
                 <td style="text-align: left"><?=$row->keterangan?></td>
                 <td>
 

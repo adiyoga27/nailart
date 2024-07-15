@@ -90,7 +90,7 @@
                                                             <tr>
                                                                 <td><?=$i++?></td>
                                                                 <td><?=$value->nama_produk?></td>
-                                                                <td><?=$value->harga?></td>
+                                                                <td><?=number_format($value->harga, 0,",",".")?></td>
                                                                 <td><?=$value->qty?></td>
                                                                 <td class="text-end"><?=number_format($value->total, 0,",",".")?></td>
                                                             </tr>
@@ -104,7 +104,7 @@ $total += $value->total;
                                                                     <strong>Total</strong>
                                                                 </td>
                                                                 <td class="border-0 text-end">
-                                                                    <h4 class="m-0">Rp<?=number_format($total, 0,",",".")?></h4>
+                                                                    <h4 class="m-0"><strong>Rp<?=number_format($total, 0,",",".")?></strong></h4>
                                                                 </td>
                                                             </tr>
                                                             <tr>
@@ -112,7 +112,7 @@ $total += $value->total;
                                                                     <strong>Pembayaran</strong>
                                                                 </td>
                                                                 <td class="border-0 text-end">
-                                                                    <h4 class="m-0">Rp<?=number_format($value->bayar, 0,",",".")?></h4>
+                                                                    <h4 class="m-0"><strong>Rp<?=number_format($value->bayar, 0,",",".")?></strong></h4>
                                                                 </td>
                                                             </tr>
                                                             <tr>
@@ -120,7 +120,7 @@ $total += $value->total;
                                                                     <strong>Sisa</strong>
                                                                 </td>
                                                                 <td class="border-0 text-end">
-                                                                    <h4 class="m-0">Rp<?=number_format($value->kembalian, 0,",",".")?></h4>
+                                                                    <h4 class="m-0"><strong>Rp<?=number_format($value->kembalian, 0,",",".")?></strong></h4>
                                                                 </td>
                                                             </tr>
                                                         </tbody>

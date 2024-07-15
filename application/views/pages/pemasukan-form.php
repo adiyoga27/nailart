@@ -32,10 +32,10 @@
                         <!--  -->
                         <div class="form-group col-md-12">
                             <label>Akun</label>
-                            <select name="akun" class="form-control" required>
+                            <select name="akun"  onmousedown="(function(e){ e.preventDefault(); })(event, this)" class="form-control" readonly required>
                                 <option value="">-- Pilih Salah Satu --</option>
                                 <?php foreach ($akun as $row) { ?>
-                                <option <?= isset($data) && $data->akun == $row->id_akun ? 'selected' : '' ?>
+                                <option <?=  12 == $row->id_akun ? 'selected' : '' ?>
                                     value="<?= $row->id_akun ?>"><?= $row->kode_akun ?> | <?= $row->nama_akun ?>
                                 </option>
                                 <?php } ?>

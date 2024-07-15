@@ -59,7 +59,7 @@
 
                     }else{
 
-                      echo date('d F Y', strtotime($value['tanggal'])) ;
+                      echo convertDateIndo(date('Y-m-d', strtotime($value['tanggal']))) ;
                     }
                     
                     ?></td>

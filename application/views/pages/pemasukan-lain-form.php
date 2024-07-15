@@ -21,7 +21,8 @@
           </div>
           <div class="form-group col-md-6">
             <label>Jumlah</label>
-            <input type="number" name="jumlah" class="form-control" required value="<?=isset($data)?$data->jumlah:''?>">
+            <input type="text"  class="form-control uang" required value="<?=isset($data)?number_format($data->jumlah,0,",","."):''?>">
+            <input type="hidden" name="jumlah" class="form-control jumlah"  required value="<?=isset($data)?$data->jumlah:''?>">
           </div>
           <div class="form-group col-md-6">
             <label>Akun</label>
@@ -45,3 +46,31 @@
     </section>
   </div>
 </section>
+<script src="<?= base_url('assets/') ?>plugins/jQuery/jQuery-2.1.4.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
+     $(document).ready(function() {
+        // Event listener for keyup on elements with class 'tanpa_rupiah'
+        $('.uang').keyup(function(e) {
+            // Call formatRupiah function and update the value of the input field
+            $(".jumlah").val($(this).val().split('.').join(""));
+            $(this).val(formatRupiah($(this).val()));
+        });
+    });
+    function formatRupiah(angka, prefix)
+    {
+        var number_string = angka.replace(/[^,\d]/g, '').toString(),
+            split    = number_string.split(','),
+            sisa     = split[0].length % 3,
+            rupiah     = split[0].substr(0, sisa),
+            ribuan     = split[0].substr(sisa).match(/\d{3}/gi);
+            
+        if (ribuan) {
+            separator = sisa ? '.' : '';
+            rupiah += separator + ribuan.join('.');
+        }
+        
+        rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+        return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
+    }
+</script>

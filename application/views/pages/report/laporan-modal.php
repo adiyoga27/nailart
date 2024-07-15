@@ -79,7 +79,7 @@
 
 
               <tr style="background-color:darkgrey !important; ; font-weight:bold">
-                <td class="table-dark" colspan="2">Modal Akhir <?php echo date('M Y', strtotime($year."-".$month."-01"))?></td>
+                <td class="table-dark" colspan="2">Modal Akhir </td>
                 <td class="table-dark" colspan="2">Rp<?php echo (number_format($modal + ($pendapatan-$prive),0,',','.'));?></td>
               </tr>
             </table>

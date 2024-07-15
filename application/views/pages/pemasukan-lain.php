@@ -25,9 +25,9 @@
               <?php $no = 1; foreach ($data as $row) { ?>
               <tr>
                 <td><?=$no++?></td>
-                <td><?=tanggal($row->tanggal_transaksi)?></td>
+                <td style="text-align: left"><?=tanggal($row->tanggal_transaksi)?></td>
                 <td style="text-align: left"><?=$row->keterangan?></td>
-                <td style="text-align: right">Rp<?=number_format($row->jumlah,0, ",",".")?></td>
+                <td style="text-align: left">Rp<?=number_format($row->jumlah,0, ",",".")?></td>
                 <td style="text-align: left"><?=$row->nama_user?></td>
                 <td>
 

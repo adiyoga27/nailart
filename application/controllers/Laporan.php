@@ -46,7 +46,8 @@ class Laporan extends CI_Controller {
 						->join('akun','jurnal.akun = akun.id_akun')
 						->where('tb_jurnal.tanggal >=',$startDate)
 						->where('tb_jurnal.tanggal <=',$endDate)
-						->where_in('akun.kategori_akun', ['beban', 'prive', 'pendapatan'])
+						->where_in('akun.kategori_akun', ['beban', 'prive', 'pendapatan','aset'])
+						->where_not_in('tb_jurnal.akun_pengeluaran',[29])
 						->order_by('jurnal.tanggal', 'asc')
 						->order_by('jurnal.id_jurnal','ASC')
 
@@ -99,40 +100,98 @@ class Laporan extends CI_Controller {
 					
 						$previousDate = null;
 						foreach ($jurnals as $value) {
+							$akunPengeluaran = $this->db->from('akun')->where('id_akun', $value->akun_pengeluaran)->get()->row();
+						
 							// if($previousDate == null || $value->tanggal != $previousDate){
 								$tanggal = $value->tanggal;
 							// $previousDate = $value->tanggal;
 							// }else{
 							// 	$tanggal = "";
 							// }
-							if($value->kredit>0){
+							 if($akunPengeluaran->kode_akun == 102){
 								$results[] = array(
 									'tanggal' => $tanggal,
-									'keterangan' => "Kas",
-									'kode_akun' => '101',
-									'nama_akun' => "Kas",
-									'debit' => $value->kredit,
+									'keterangan' => "Piutang",
+									'kode_akun' => $akunPengeluaran->kode_akun,
+									'nama_akun' => $akunPengeluaran->nama_akun,
+									'debit' => $value->debit,
 									'kredit' =>0,
 								);
 							}
-							$results[] = array(
-								'tanggal' => $value->kredit>0 ? "" :$tanggal,
-								'keterangan' => $value->keterangan,
-								'kode_akun' => $value->kode_akun,
-								'nama_akun' => $value->nama_akun,
-								'debit' => $value->debit,
-								'kredit' => $value->kredit,
-							);
 
-							if($value->debit>0){
+							if($value->kredit>0){
+								
+									$results[] = array(
+										'tanggal' => $tanggal,
+										'keterangan' => "Kas",
+										'kode_akun' => '101',
+										'nama_akun' => "Kas",
+										'debit' => $value->kredit,
+										'kredit' =>0,
+									);
+							
+							}
+							if($akunPengeluaran->kode_akun == 201){
 								$results[] = array(
-									'tanggal' => "",
-									'keterangan' => "Kas",
-									'kode_akun' => '101',
-									'nama_akun' => "Kas",
-									'debit' => 0,
+									'tanggal' => $value->kredit>0 ? "" :$tanggal,
+									'keterangan' => $value->keterangan,
+									'kode_akun' => $value->kode_akun,
+									'nama_akun' => $value->nama_akun,
+									'debit' =>  $value->debit,
+									'kredit' => $value->kredit,
+								);
+							}else if($akunPengeluaran->kode_akun == 102){
+								$results[] = array(
+									'tanggal' => $value->debit>0 ? "" :$tanggal,
+									'keterangan' => $value->keterangan,
+									'kode_akun' => $value->kode_akun,
+									'nama_akun' => $value->nama_akun,
+									'debit' =>  $value->kredit,
 									'kredit' => $value->debit,
 								);
+							}else{
+								if($akunPengeluaran->kode_akun > 401 && $akunPengeluaran->kode_akun <= 499){
+									$results[] = array(
+										'tanggal' => $value->kredit>0 ? "" :$tanggal,
+										'keterangan' => $value->keterangan,
+										'kode_akun' => $akunPengeluaran->kode_akun,
+										'nama_akun' => $akunPengeluaran->nama_akun,
+										'debit' =>  $value->debit,
+										'kredit' => $value->kredit,
+									);
+								}else{
+									$results[] = array(
+										'tanggal' => $value->kredit>0 ? "" :$tanggal,
+										'keterangan' => $value->keterangan,
+										'kode_akun' => $value->kode_akun,
+										'nama_akun' => $value->nama_akun,
+										'debit' =>  $value->debit,
+										'kredit' => $value->kredit,
+									);
+								}
+								
+							}
+							if($akunPengeluaran->kode_akun == 201){
+								$results[] = array(
+									'tanggal' => "",
+									'keterangan' => "Hutang",
+									'kode_akun' => $akunPengeluaran->kode_akun,
+									'nama_akun' => $akunPengeluaran->nama_akun,
+									'kredit' => $value->debit,
+									'debit' =>0,
+								);
+							}
+							if($akunPengeluaran->kode_akun != 201 & $akunPengeluaran->kode_akun != 102 ){
+								if($value->debit>0){
+									$results[] = array(
+										'tanggal' => "",
+										'keterangan' => "Kas",
+										'kode_akun' => '101',
+										'nama_akun' => "Kas",
+										'debit' => 0,
+										'kredit' => $value->debit,
+									);
+								}
 							}
 						}
 						$data['startDate'] = $startDate;
@@ -194,7 +253,7 @@ class Laporan extends CI_Controller {
 						->order_by('kode_akun', 'asc')
 						->get()->result();
 
-				
+			
 				foreach ($akuns as $v) {
 					$res[] = array(
 						'akun' => $v->nama_akun,
@@ -202,6 +261,21 @@ class Laporan extends CI_Controller {
 						'kredit' => $v->kredit,
 					);
 					
+				}
+				if($c == 'beban'){
+					$beban =  $this->db
+					->select('sum(debit) as debit, sum(kredit) as kredit')
+					->from('jurnal')
+					->where('tb_jurnal.tanggal >= ',$startDate)
+					->where('tb_jurnal.tanggal <=',$endDate)
+					->where('tb_jurnal.akun', 28)
+					->group_by('jurnal.akun')
+					->get()->row();
+					$res[] = array(
+						'akun' => 'Perlengkapan',
+						'debit' => $beban->debit,
+						'kredit' => $beban->kredit,
+					);
 				}
 				$result[] = array(
 					'title' => $v->tipe_akun,
@@ -215,7 +289,7 @@ class Laporan extends CI_Controller {
 				);
 			}
 	
-			
+	
 			// foreach ($akuns as $akun) { 
 			// 	$res = $result =[];
 			// 	$tipes = $this->data->akunLabaRugi($akun->tipe_akun)->result();
@@ -285,6 +359,19 @@ class Laporan extends CI_Controller {
 						->from('jurnal')
 						->where('tb_jurnal.tanggal >=',$startDate)
 						->where('tb_jurnal.tanggal <=',$endDate)
+						->where_in('tb_jurnal.akun_pengeluaran', [11])
+						->get()->row()->kas ?? 0,
+			'hutang' => $this->db->select('(sum(debit)) as kas')
+						->from('jurnal')
+						->where('tb_jurnal.tanggal >=',$startDate)
+						->where('tb_jurnal.tanggal <=',$endDate)						
+						->where_in('tb_jurnal.akun_pengeluaran', [29])
+						->get()->row()->kas ?? 0,
+			'perlengkapan' => $this->db->select('( sum(debit)) as kas')
+						->from('jurnal')
+						->where('tb_jurnal.tanggal >=',$startDate)
+						->where('tb_jurnal.tanggal <=',$endDate)						
+						->where_in('tb_jurnal.akun', [28])
 						->get()->row()->kas ?? 0,
 			'modal' => $this->db->select('(sum(kredit) - sum(debit)) as modal')
 						->from('jurnal')
@@ -292,14 +379,23 @@ class Laporan extends CI_Controller {
 						->where('kategori_akun','modal')
 						->where('tb_jurnal.tanggal >=',$startDate)
 						->where('tb_jurnal.tanggal <=',$endDate)
+						->where_not_in('tb_jurnal.akun_pengeluaran')
+						->where_not_in('tb_jurnal.akun')
+
 						->get()->row()->modal ?? 0,
-			'ditahan' => $this->db->select('(sum(kredit) - sum(debit)) as ditahan')
+			'ditahan' => ( $this->db->select('(sum(kredit) - sum(debit)) as ditahan')
+			->from('jurnal')
+			->join('akun', 'jurnal.akun = akun.id_akun')
+			->where_in('kategori_akun',['pendapatan', ])
+			->where('tb_jurnal.tanggal >=',$startDate)
+			->where('tb_jurnal.tanggal <=',$endDate)
+			->get()->row()->ditahan  - $this->db->select('(sum(debit)) as ditahan')
 						->from('jurnal')
 						->join('akun', 'jurnal.akun = akun.id_akun')
-						->where_in('kategori_akun',['pendapatan', 'beban', 'prive'])
+						->where_in('kategori_akun',['beban','aset'])
 						->where('tb_jurnal.tanggal >=',$startDate)
 						->where('tb_jurnal.tanggal <=',$endDate)
-						->get()->row()->ditahan ?? 0
+						->get()->row()->ditahan )?? 0
 		);
 		$data['startDate']	= $startDate;
 		$data['endDate']	= $endDate;

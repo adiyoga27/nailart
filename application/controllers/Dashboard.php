@@ -198,13 +198,15 @@ class Dashboard extends CI_Controller
             switch ($result->kategori_akun) {
                 case 'aset': $kode = 101; 
                   break;
+                case 'pendapatan': $kode = 201 ;
+                  break;
                 case 'pendapatan': $kode = 401 ;
                   break;
                 case 'beban': $kode = 501 ;
                   break;
                 case 'modal': $kode = 301 ;
                   break;
-                case 'prive': $kode = 201 ;
+                case 'prive': $kode = 601 ;
                   break;
                 default:
                 $kode = 601 ;
@@ -308,6 +310,8 @@ class Dashboard extends CI_Controller
             $data = [
                 'id_transaksi' => $kode,
                 'akun' => $p['akun'],
+                'akun_pengeluaran' => $p['akun_pengeluaran'],
+
                 'jumlah' => $p['jumlah'],
                 'tanggal_transaksi' => $p['tanggal_transaksi'],
                 'keterangan' => $p['keterangan'],
@@ -320,6 +324,7 @@ class Dashboard extends CI_Controller
                 'kode_transaksi' => $data['id_transaksi'],
                 'user' => $data['user'],
                 'akun' => $data['akun'],
+                'akun_pengeluaran' => $p['akun_pengeluaran'],
                 'tanggal' => $data['tanggal_transaksi'],
                 'debit' => 0,
                 'kredit' => $data['jumlah'],
@@ -347,6 +352,8 @@ class Dashboard extends CI_Controller
         if ($p = $this->input->post()) {
             $data = [
                 'akun' => $p['akun'],
+                'akun_pengeluaran' => $p['akun_pengeluaran'],
+
                 'jumlah' => $p['jumlah'],
                 'tanggal_transaksi' => $p['tanggal_transaksi'],
                 'keterangan' => $p['keterangan'],
@@ -358,6 +365,8 @@ class Dashboard extends CI_Controller
             $jurnal = [
                 'user' => $data['user'],
                 'akun' => $data['akun'],
+                'akun_pengeluaran' => $p['akun_pengeluaran'],
+
                 'tanggal' => $data['tanggal_transaksi'],
                 'debit' => 0,
                 'kredit' => $data['jumlah'],
@@ -647,6 +656,7 @@ class Dashboard extends CI_Controller
                 'id_pengeluaran' => $kode,
                 'keterangan' => $p['keterangan'],
                 'akun' => $p['akun'],
+                'akun_pengeluaran' => $p['akun_pengeluaran'],
                 'jumlah' => $p['harga'],
                 'tanggal_pengeluaran' => $p['tanggal_pengeluaran'],
                 // 'invoice' => $upload['file_name'],
@@ -657,6 +667,8 @@ class Dashboard extends CI_Controller
                 'kode_transaksi' => $data['id_pengeluaran'],
                 'user' => $data['user'],
                 'akun' => $data['akun'],
+                'akun_pengeluaran' => $p['akun_pengeluaran'],
+
                 'tanggal' => $data['tanggal_pengeluaran'],
                 'kredit' => 0,
                 'debit' => $data['jumlah'],
@@ -685,6 +697,7 @@ class Dashboard extends CI_Controller
             $data = [
                 'keterangan' => $p['keterangan'],
                 'akun' => $p['akun'],
+                'akun_pengeluaran' => $p['akun_pengeluaran'],
                 'jumlah' => $p['harga'],
                 'tanggal_pengeluaran' => $p['tanggal_pengeluaran'],
                 'user' => $this->session->userdata('kode'),
@@ -693,6 +706,7 @@ class Dashboard extends CI_Controller
             $jurnal = [
                 'user' => $data['user'],
                 'akun' => $data['akun'],
+                'akun_pengeluaran' => $p['akun_pengeluaran'],
                 'tanggal' => $data['tanggal_pengeluaran'],
                 'kredit' => 0,
                 'debit' => $data['jumlah'],

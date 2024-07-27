@@ -52,6 +52,8 @@
               $prive = $row->kredit;
             }else if($row->kategori_akun == 'beban'){
               $pendapatan = $pendapatan - $row->debit;
+            }else if($row->kategori_akun == 'aset'){
+              $pendapatan = $pendapatan - $row->debit;
             }
             ?>
           <?php } ?>

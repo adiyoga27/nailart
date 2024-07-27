@@ -91,7 +91,7 @@ class M_data extends CI_Model {
 				->join('akun','akun.id_akun = jurnal.akun')
 				->where('tanggal >=',$startDate)
 				->where('tanggal <=',$endDate)
-				->where_in('kategori_akun', ['modal', 'beban', 'prive', 'pendapatan'])
+				->where_in('kategori_akun', ['modal', 'beban', 'prive', 'pendapatan','aset'])
 				->group_by('akun.kategori_akun')
 				->get();
 

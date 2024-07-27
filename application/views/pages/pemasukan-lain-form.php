@@ -25,11 +25,20 @@
             <input type="hidden" name="jumlah" class="form-control jumlah"  required value="<?=isset($data)?$data->jumlah:''?>">
           </div>
           <div class="form-group col-md-6">
-            <label>Akun</label>
+            <label>Debit</label>
             <select name="akun" class="form-control" required>
               <option value="">-- Pilih Salah Satu --</option>
               <?php foreach ($akun as $row) { ?>
                 <option <?=isset($data)&&$data->akun == $row->id_akun ? 'selected' : '' ?> value="<?=$row->id_akun?>"><?=$row->kode_akun?> | <?=$row->nama_akun?></option>
+              <?php } ?>
+            </select>
+          </div>
+          <div class="form-group col-md-6">
+            <label>Kredit</label>
+            <select name="akun_pengeluaran" class="form-control" required>
+              <option value="">-- Pilih Salah Satu --</option>
+              <?php foreach ($akun as $row) { ?>
+                <option <?=isset($data)&&$data->akun_pengeluaran == $row->id_akun ? 'selected' : '' ?> value="<?=$row->id_akun?>"><?=$row->kode_akun?> | <?=$row->nama_akun?></option>
               <?php } ?>
             </select>
           </div>

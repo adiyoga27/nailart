@@ -27,12 +27,21 @@
           </div>
  
 
-          <div class="form-group col-md-12">
-            <label>Akun</label>
+          <div class="form-group col-md-6">
+            <label>Debit</label>
             <select name="akun" class="form-control" required>
               <option value="">-- Pilih Salah Satu --</option>
               <?php foreach ($akun as $row) { ?>
                 <option <?=isset($data)&&$data->akun == $row->id_akun ? 'selected' : '' ?> value="<?=$row->id_akun?>"><?=$row->kode_akun?> | <?=$row->nama_akun?></option>
+              <?php } ?>
+            </select>
+          </div>
+          <div class="form-group col-md-6">
+            <label>Kredit</label>
+            <select name="akun_pengeluaran" class="form-control" required>
+              <option value="">-- Pilih Salah Satu --</option>
+              <?php foreach ($akun as $row) { ?>
+                <option <?=isset($data)&&$data->akun_pengeluaran == $row->id_akun ? 'selected' : '' ?> value="<?=$row->id_akun?>"><?=$row->kode_akun?> | <?=$row->nama_akun?></option>
               <?php } ?>
             </select>
           </div>

@@ -16,6 +16,7 @@
               <option <?=isset($data)&&$data->kategori_akun == 'beban' ? 'selected' : ''?> value="beban"> Beban/Pengeluaran </option>
               <option <?=isset($data)&&$data->kategori_akun == 'prive' ? 'selected' : ''?> value="prive"> Prive </option>
               <option <?=isset($data)&&$data->kategori_akun == 'aset' ? 'selected' : ''?> value="aset"> Aset </option>
+              <option <?=isset($data)&&$data->kategori_akun == 'kewajiban' ? 'selected' : ''?> value="kewajiban"> Kewajiban </option>
 
             </select>
           </div>

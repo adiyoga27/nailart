@@ -91,7 +91,7 @@ class M_data extends CI_Model {
 				->join('akun','akun.id_akun = jurnal.akun')
 				->where('tanggal >=',$startDate)
 				->where('tanggal <=',$endDate)
-				->where_in('kategori_akun', ['modal', 'beban', 'prive', 'pendapatan','aset'])
+				->where_in('kategori_akun', ['modal', 'beban', 'prive', 'pendapatan'])
 				->group_by('akun.kategori_akun')
 				->get();
 
@@ -188,8 +188,32 @@ class M_data extends CI_Model {
 		return $this->db->get();
 	}
 
+	public function hutang()
+	{
+		$this->db->select('*');
+		$this->db->from('pengeluaran');
+		$this->db->join('akun','pengeluaran.akun_pengeluaran = akun.id_akun');
+		$this->db->where('nama_akun', 'Hutang' );
+		return $this->db->get();
+	}
 
-
+	public function pembayaranHutang($kode) {
+		$this->db->select('*');
+		$this->db->from('hutang_pembayaran');
+		$this->db->where('hutang_pembayaran.id_pengeluaran', $kode);
+		return $this->db->get();
+	}
+	public function sisaHutang($kode) {
+		$hutang = $this->db->select('jumlah')
+					->from('pengeluaran')
+					->where('id_pengeluaran', $kode)
+					->get()->row()->jumlah;
+		$pembayaran = $this->db->select('sum(total) as jumlah')
+						->from('hutang_pembayaran')
+						->where('id_pengeluaran', $kode)
+						->get()->row()->jumlah ;
+		return $hutang - $pembayaran ;
+	}
 	public function jurnal($awal=null,$akhir=null)
 	{
 		$this->db->select('*,sum(kredit) as kredit_, sum(debit) as debit_');

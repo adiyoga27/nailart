@@ -46,8 +46,9 @@ class Laporan extends CI_Controller {
 						->join('akun','jurnal.akun = akun.id_akun')
 						->where('tb_jurnal.tanggal >=',$startDate)
 						->where('tb_jurnal.tanggal <=',$endDate)
-						->where_in('akun.kategori_akun', ['beban', 'prive', 'pendapatan','aset'])
-						->where_not_in('tb_jurnal.akun_pengeluaran',[29])
+						// ->where_in('akun.kategori_akun', ['beban', 'prive', 'pendapatan','aset'])
+						// ->where_not_in('tb_jurnal.akun_pengeluaran',[29])
+						->where_in('tb_jurnal.akun_pengeluaran',[11])
 						->order_by('jurnal.tanggal', 'asc')
 						->order_by('jurnal.id_jurnal','ASC')
 
@@ -80,6 +81,8 @@ class Laporan extends CI_Controller {
 
 	public function jurnal()
 	{
+        $this->refreshHutang();
+
 		$startDate = date('Y-m-d');
 		$endDate = date('Y-m-d');
 		if ($this->input->post('button') == 'filter' ||  $this->input->post('button') == 'cetak' ) {
@@ -93,6 +96,7 @@ class Laporan extends CI_Controller {
 						->join('akun','jurnal.akun = akun.id_akun')
 						->where('tb_jurnal.tanggal >=',$startDate)
 						->where('tb_jurnal.tanggal <=',$endDate)
+						->where('tb_jurnal.status <=',1)
 						->order_by('tb_jurnal.tanggal','ASC')
 						->order_by('tb_jurnal.id_jurnal','ASC')
 
@@ -240,6 +244,8 @@ class Laporan extends CI_Controller {
 		
 
 			$categories = ['pendapatan', 'beban'];
+			$t = 0;
+
 			foreach ($categories as $c) {
 				$res = $result = [];
 				$akuns = $this->db
@@ -263,19 +269,26 @@ class Laporan extends CI_Controller {
 					
 				}
 				if($c == 'beban'){
-					$beban =  $this->db
-					->select('sum(debit) as debit, sum(kredit) as kredit')
+					$bebans =  $this->db
+					->select('sum(debit) as debit, sum(kredit) as kredit, kode_transaksi')
 					->from('jurnal')
 					->where('tb_jurnal.tanggal >= ',$startDate)
 					->where('tb_jurnal.tanggal <=',$endDate)
 					->where('tb_jurnal.akun', 28)
 					->group_by('jurnal.akun')
-					->get()->row();
-					$res[] = array(
-						'akun' => 'Perlengkapan',
-						'debit' => $beban->debit,
-						'kredit' => $beban->kredit,
-					);
+					->get()->result();
+					foreach ($bebans as $b) {
+						$cek = $this->db->select('sum(total) as total')->from('hutang_pembayaran')->where('id_pengeluaran', $b->kode_transaksi)->group_by('id_pengeluaran')->get()->row()->total;
+						if($cek >= 0){
+
+							$t = $t + $cek; 
+						}
+					}
+					// $res[] = array(
+					// 	'akun' => 'Perlengkapan',
+					// 	'debit' => $t,
+					// 	'kredit' => $beban->kredit,
+					// );
 				}
 				$result[] = array(
 					'title' => $v->tipe_akun,
@@ -352,27 +365,34 @@ class Laporan extends CI_Controller {
 		
 			
 		}
+$hutangs = $this->db
+->from('jurnal')
+->where('tb_jurnal.tanggal >=',$startDate)
+->where('tb_jurnal.tanggal <=',$endDate)						
+->where_in('tb_jurnal.akun_pengeluaran', [29])
+->get()->result();  
+$hutang = 0;
+$pl = 0;
+foreach ($hutangs as $h) {
+	$kodetrx = $h->kode_transaksi;
 
+	$pelunasan = $this->db->select('sum(total) as total')
+				->from('hutang_pembayaran')
+				->where('id_pengeluaran', $kodetrx)
+				->get()->row()->total;
+				$hutang = $hutang + ($h->debit - $pelunasan);
+				$pl = $pl + $pelunasan;
+}
 
 		$result = array(
-			'kas' => $this->db->select('(sum(kredit) - sum(debit)) as kas')
+			'kas' => ($this->db->select('(sum(kredit) - sum(debit)) as kas')
 						->from('jurnal')
 						->where('tb_jurnal.tanggal >=',$startDate)
 						->where('tb_jurnal.tanggal <=',$endDate)
 						->where_in('tb_jurnal.akun_pengeluaran', [11])
-						->get()->row()->kas ?? 0,
-			'hutang' => $this->db->select('(sum(debit)) as kas')
-						->from('jurnal')
-						->where('tb_jurnal.tanggal >=',$startDate)
-						->where('tb_jurnal.tanggal <=',$endDate)						
-						->where_in('tb_jurnal.akun_pengeluaran', [29])
-						->get()->row()->kas ?? 0,
-			'perlengkapan' => $this->db->select('( sum(debit)) as kas')
-						->from('jurnal')
-						->where('tb_jurnal.tanggal >=',$startDate)
-						->where('tb_jurnal.tanggal <=',$endDate)						
-						->where_in('tb_jurnal.akun', [28])
-						->get()->row()->kas ?? 0,
+						->get()->row()->kas) ?? 0,
+			'hutang' => $hutang,
+			'perlengkapan' => $pl,
 			'modal' => $this->db->select('(sum(kredit) - sum(debit)) as modal')
 						->from('jurnal')
 						->join('akun', 'jurnal.akun = akun.id_akun')
@@ -392,7 +412,7 @@ class Laporan extends CI_Controller {
 			->get()->row()->ditahan  - $this->db->select('(sum(debit)) as ditahan')
 						->from('jurnal')
 						->join('akun', 'jurnal.akun = akun.id_akun')
-						->where_in('kategori_akun',['beban','aset'])
+						->where_in('kategori_akun',['beban'])
 						->where('tb_jurnal.tanggal >=',$startDate)
 						->where('tb_jurnal.tanggal <=',$endDate)
 						->get()->row()->ditahan )?? 0
@@ -700,7 +720,35 @@ class Laporan extends CI_Controller {
 	
 	}
 
+	function refreshHutang() {
+		$job = $this->db->select('*')->from('pengeluaran')
+				->join('akun','pengeluaran.akun_pengeluaran = akun.id_akun')
+				->where('nama_akun', 'Hutang' )->get()->result();
+		foreach($job as $row){
+		 $num = $this->db
+				 ->select('SUM(total) as total')
+				 ->from('hutang_pembayaran')
+				 ->where('id_pengeluaran', $row->id_pengeluaran)->get()->row()->total;
+				 $status = 0;
+			 if($num >= $row->jumlah){
+				   $status = 1;
+			 }
+			 $this->db->update('pengeluaran', [
+				'status' => $status
+			], ['id_pengeluaran' => $row->id_pengeluaran]);
+			$this->db->update('jurnal', [
+				'status' => $status
+			], ['kode_transaksi' => $row->id_pengeluaran]);
 	
+			$cek = $this->db->select('*')->from('hutang_pembayaran')->where('id_pengeluaran', $row->id_pengeluaran)->get()->result();
+			foreach ($cek as $c) {
+				$this->db->update('jurnal', [
+					'status' => $status
+				], ['kode_transaksi' => $c->id_pembayaran]);
+			}
+	  
+		 }
+	}
 }
 
 /* End of file Laporan.php */

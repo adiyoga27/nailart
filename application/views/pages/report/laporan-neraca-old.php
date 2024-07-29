@@ -57,14 +57,13 @@
                 <td>Hutang</td>
                 <td>Rp<?=number_format($data['hutang'],0,",",".")?></td>
               </tr>
-              <tr>
-              <td>Perlengkapan</td>
-                <td>Rp<?=number_format($data['perlengkapan'],0,",",".")?></td>
-                <td style="font-weight: bold;">Modal </td>
-                <td></td>
+              <tr  style="font-weight: bold;">
+                <td colspan="2">Aktiva Tetap</td>
+                <td  colspan="2">Modal</td>
               </tr>
-              <td></td>
-                <td></td>
+              <tr>
+                <td>Perlengkapan</td>
+                <td>Rp<?=number_format($data['perlengkapan'],0,",",".")?></td>
                 <td>Modal Awal</td>
                 <td>Rp<?=number_format($data['modal'],0,",",".")?></td>
               </tr>

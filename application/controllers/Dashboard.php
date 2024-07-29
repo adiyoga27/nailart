@@ -676,8 +676,9 @@ class Dashboard extends CI_Controller
             ];
 
             $this->db->trans_start();
-            $this->db->insert('pengeluaran', $data);
             $this->db->insert('jurnal', $jurnal);
+            $this->db->insert('pengeluaran', $data);
+      
             $this->db->trans_complete();
             $this->session->set_flashdata('msg', 'swal("Berhasil!", "Data berhasil disimpan", "success");');
             redirect(base_url('pengeluaran'));
@@ -728,6 +729,8 @@ class Dashboard extends CI_Controller
             $this->db->trans_start();
             $this->db->update('pengeluaran', $data, ['id_pengeluaran' => $kode]);
             $this->db->update('jurnal', $jurnal, ['kode_transaksi' => $kode]);
+
+
             $this->db->trans_complete();
             $this->session->set_flashdata('msg', 'swal("Berhasil!", "Data berhasil disimpan", "success");');
             redirect(base_url('pengeluaran'));
@@ -741,7 +744,6 @@ class Dashboard extends CI_Controller
             $this->load->view('template', $data);
         }
     }
-
     public function delete_pengeluaran($kode)
     {
         $this->db->trans_start();
@@ -753,6 +755,84 @@ class Dashboard extends CI_Controller
         redirect(base_url('pengeluaran'));
     }
 
+    // CURD hutang
+    public function hutang()
+    {
+        $this->refreshHutang();
+
+        $data['data'] = $this->data->hutang()->result();
+        $data['title'] = 'Data Hutang';
+        $data['side'] = 'hutang';
+        $data['page'] = 'pages/hutang';
+        $this->load->view('template', $data);
+    }
+
+    public function pembayaran_hutang($kode)
+    {
+        $data['akun'] = $this->data->akun()->result();
+        $data['datenow'] = date("Y-m-d");
+        $data['sisahutang'] = number_format($this->data->sisaHutang($kode), 0, ",",".");
+        $data['kode'] = $kode;
+        $data['data'] = $this->data->pembayaranHutang($kode)->result();
+        $data['title'] = 'Data Pembayaran Hutang';
+        $data['side'] = 'pembayaran';
+        $data['page'] = 'pages/pembayaran-hutang';
+        $this->load->view('template', $data);
+    }
+    public function add_bayar_hutang($id_pengeluaran)
+    {
+
+        $this->refreshHutang();
+
+            $kode = $this->kode->hutang();
+            $p = $this->input->post();
+          
+            $data = [
+                'id_pembayaran' => $kode,
+                'keterangan' => $p['keterangan'],
+                'akun' => $p['akun'],
+                'total' => $p['total'],
+                'tanggal' => $p['tanggal'],
+                // 'invoice' => $upload['file_name'],
+                'id_pengeluaran' => $p['id_pengeluaran'],
+                'user' => $this->session->userdata('kode'),
+            ];
+            if( $p['total'] > $this->data->sisaHutang($p['id_pengeluaran'])){
+                $this->session->set_flashdata('msg', 'swal("Gagal!", "Pembayaran tidak boleh lebih dari hutang !!!", "error");');
+                redirect(base_url('hutang/bayar')."/".$data['id_pengeluaran']);
+            }
+            $jurnal = [
+                'kode_transaksi' => $data['id_pembayaran'],
+                'user' => $data['user'],
+                'akun' => 29,
+                'akun_pengeluaran' => $p['akun'],
+
+                'tanggal' => $data['tanggal'],
+                'kredit' => 0,
+                'debit' => $data['total'],
+                'keterangan' => $data['keterangan'],
+            ];
+
+            $this->db->trans_start();
+            $this->db->insert('jurnal', $jurnal);
+            $this->db->insert('hutang_pembayaran', $data);
+      
+            $this->db->trans_complete();
+            $this->session->set_flashdata('msg', 'swal("Berhasil!", "Data berhasil disimpan", "success");');
+            redirect(base_url('hutang/bayar')."/".$data['id_pengeluaran']);
+      
+    }
+    public function delete_pembayaran($kode)
+    {
+        $this->db->trans_start();
+        $this->db->delete('hutang_pembayaran', ['id_pembayaran' => $kode]);
+        $this->db->delete('jurnal', ['kode_transaksi' => $kode]);
+        $this->db->trans_complete();
+
+        $this->session->set_flashdata('msg', 'swal("Berhasil!", "Data berhasil dihapus", "success");');
+
+        redirect($_SERVER['HTTP_REFERER']);
+    }
     public function laporan()
     {
         if ($p = $this->input->post()) {
@@ -812,6 +892,36 @@ class Dashboard extends CI_Controller
             $this->load->view('template', $data);
         }
     }
+    
+function refreshHutang() {
+    $job = $this->db->select('*')->from('pengeluaran')
+            ->join('akun','pengeluaran.akun_pengeluaran = akun.id_akun')
+            ->where('nama_akun', 'Hutang' )->get()->result();
+    foreach($job as $row){
+     $num = $this->db
+             ->select('SUM(total) as total')
+             ->from('hutang_pembayaran')
+             ->where('id_pengeluaran', $row->id_pengeluaran)->get()->row()->total;
+             $status = 0;
+         if($num >= $row->jumlah){
+               $status = 1;
+         }
+        $this->db->update('pengeluaran', [
+            'status' => $status
+        ], ['id_pengeluaran' => $row->id_pengeluaran]);
+        $this->db->update('jurnal', [
+            'status' => !$status
+        ], ['kode_transaksi' => $row->id_pengeluaran]);
+
+        $cek = $this->db->select('*')->from('hutang_pembayaran')->where('id_pengeluaran', $row->id_pengeluaran)->get()->result();
+        foreach ($cek as $c) {
+            $this->db->update('jurnal', [
+                'status' => !$status
+            ], ['kode_transaksi' => $c->id_pembayaran]);
+        }
+  
+     }
+}
 }
 
 /* End of file Dashboard.php */

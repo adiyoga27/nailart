@@ -47,7 +47,12 @@ $route['pengeluaran/add']				= 'dashboard/add_pengeluaran';
 $route['pengeluaran/edit/(:any)']		= 'dashboard/edit_pengeluaran/$1';
 $route['pengeluaran/delete/(:any)']		= 'dashboard/delete_pengeluaran/$1';
 
+//hutang
+$route['hutang']					= 'dashboard/hutang';
+$route['hutang/delete/(:any)']		= 'dashboard/delete_pembayaran/$1';
 
+$route['hutang/bayar/(:any)']		= 'dashboard/pembayaran_hutang/$1';
+$route['hutang/pay/(:any)']		= 'dashboard/add_bayar_hutang/$1';
 
 $route['404_override'] 					= 'dashboard/error';
 $route['translate_uri_dashes'] 			= FALSE;

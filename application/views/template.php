@@ -129,7 +129,11 @@ function convertDateIndo($tanggal){
                 <i class="fa fa-angle-double-right"></i> <span>Pengeluaran</span> 
               </a>
             </li>
-        
+            <li class="<?=$side == 'hutang' ? 'active':''?>">
+              <a href="<?=base_url('hutang')?>">
+                <i class="fa fa-angle-double-right"></i> <span>Pembayaran Hutang</span> 
+              </a>
+            </li>
             <?php } ?>
             <li class="<?=$side == 'jurnal' ? 'active':''?>">
               <a href="<?=base_url('laporan/jurnal')?>">

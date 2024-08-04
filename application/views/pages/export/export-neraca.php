@@ -23,33 +23,42 @@
     <p style="text-align: center; margin-top:-10px"><b>Laporan Neraca</b></p>
     <p style="text-align: center; margin-top:-10px"><b>Periode : <?php echo date('d-m-Y', strtotime($startDate)); ?> s/d <?php echo date('d-m-Y', strtotime($endDate)); ?></b></p>
     <table>
-              <tr style="background:#e0e0e0 !important; font-weight:bold; width:100% !important">
+              <tr style="background:#e0e0e0 !important; font-weight:bold; width:50% !important">
                 <th style="text-align: center" colspan="2">Aktiva</th>
                 <th style="text-align: center" colspan="2">Pasiva</th>
               </tr>
-              <tr style="background:#e0e0e0 !important; font-weight:bold; width:100% !important">
+              <tr style="background:#e0e0e0 !important; font-weight:bold; width:50% !important">
                 <th style="text-align: start" colspan="2">Aktiva Lancar</th>
-                <th style="text-align: start" colspan="2">Modal</th>
+                <th style="text-align: start" colspan="2">Kewajiban</th>
               </tr>
       
               <tr>
                 <td  style="width:5px; text-align: start; ">Kas</td>
-                <td  style="width:300px; text-align: right">Rp<?=number_format($data['kas'],0,",",".")?></td>
-                <td  style="width:120px; text-align: start">Modal Awal</td>
-                <td  style="width:120px; text-align: right">Rp<?=number_format($data['modal'],0,",",".")?></td>
+                <td  style="width:200px; text-align: right">Rp<?=number_format($data['kas'],0,",",".")?></td>
+                <td  style="width:120px; text-align: start">Hutang</td>
+                <td  style="width:250px; text-align: right">Rp<?=number_format($data['hutang'],0,",",".")?></td>
               </tr>
               <tr>
-                <td colspan="2"></td>
-                <td  style="width:120px; text-align: start">Laba Ditahan</td>
-                <td  style="width:120px; text-align: right">Rp<?=number_format($data['ditahan'],0,",",".")?></td>
+                <td  style="width:120px; text-align: start">Perlengkapan</td>
+                <td  style="width:120px; text-align: right">Rp<?=number_format($data['perlengkapan'],0,",",".")?></td>
+                <td  style="width:5px; text-align: start; background:#e0e0e0; font-weight:bold;" colspan="2">Modal</td>
               </tr>
-
-          
+              <tr>
+                <td  style="width:120px; text-align: start"></td>
+                <td  style="width:120px; text-align: right"></td>
+                <td  style="width:5px; text-align: start; ">Modal Awal</td>
+                <td>Rp<?=number_format($data['modal'],0,",",".")?></td>
+              </tr>
+              <tr>
+                <td  colspan="2"></td>
+                <td  style="width:5px; text-align: start; ">Laba Ditahan</td>
+                <td>Rp<?=number_format($data['ditahan'],0,",",".")?></td>
+              </tr>
               <tr style="background:#e0e0e0 !important; font-weight:bold; width:100% !important">
-                <td  style="width:5px; text-align: start; ">Total Aktiva</td>
-                <th style="text-align: right">Rp<?=number_format($data['kas'],0,",",".")?></th>
-                <td  style="width:5px; text-align: start; ">Total Pasiva</td>
-                <th style="text-align: right">Rp<?=number_format($data['modal'] + $data['ditahan'],0,",",".")?></th>
+                <td  style="text-align: start; ">Total Aktiva</td>
+                <th style="text-align: right">Rp<?=number_format($data['kas']+$data['perlengkapan'],0,",",".")?></th>
+                <td  style="text-align: start; ">Total Pasiva</td>
+                <th style="text-align: right">Rp<?=number_format($data['modal'] + $data['ditahan']+ $data['hutang'],0,",",".")?></th>
               </tr>
               <tr style="height: 100px !important">
 

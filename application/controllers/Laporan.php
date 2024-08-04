@@ -48,7 +48,7 @@ class Laporan extends CI_Controller {
 						->where('tb_jurnal.tanggal <=',$endDate)
 						// ->where_in('akun.kategori_akun', ['beban', 'prive', 'pendapatan','aset'])
 						// ->where_not_in('tb_jurnal.akun_pengeluaran',[29])
-						->where_in('tb_jurnal.akun_pengeluaran',[11])
+						->where_in('tb_jurnal.akun_pengeluaran',[11, 23, 15])
 						->order_by('jurnal.tanggal', 'asc')
 						->order_by('jurnal.id_jurnal','ASC')
 
@@ -302,6 +302,49 @@ class Laporan extends CI_Controller {
 				);
 			}
 	
+			$data = [
+				array(
+					'kategori' => 'Pendapatan',
+					'content' => array(
+						array(
+							'title' => 'pendapatan_operasional',
+							'content' => array(
+                                array(
+                                    'akun' => 'Pendapatan',
+                                    'debit' => 0,
+                                    'kredit' => $this->data->akunTotalKredit('12', $startDate, $endDate),
+								),
+								array(
+                                    'akun' => 'Pendapatan Lain-lain',
+                                    'debit' => 0,
+                                    'kredit' => $this->data->akunTotalKredit('23', $startDate, $endDate),
+								)
+							)
+						)
+					)
+				),
+				array(
+					'kategori' => 'Beban',
+                    'content' => array(
+                        array(
+                            'title' => 'beban_operasional',
+                            'content' => array(
+                                array(
+                                    'akun' => 'Beban Gaji',
+                                    'debit' => $this->data->akunTotalDebit('13', $startDate, $endDate),
+                                    'kredit' => 0,
+                                ),
+                                array(
+                                    'akun' => 'Beban Listrik',
+                                    'debit' => $this->data->akunTotalDebit('24', $startDate, $endDate),
+                                    'kredit' => 0,
+                                )
+                            )
+                        )
+                    )
+				)
+
+								];
 	
 			// foreach ($akuns as $akun) { 
 			// 	$res = $result =[];
@@ -389,33 +432,14 @@ foreach ($hutangs as $h) {
 						->from('jurnal')
 						->where('tb_jurnal.tanggal >=',$startDate)
 						->where('tb_jurnal.tanggal <=',$endDate)
-						->where_in('tb_jurnal.akun_pengeluaran', [11])
-						->get()->row()->kas) ?? 0,
-			'hutang' => $hutang,
-			'perlengkapan' => $pl,
-			'modal' => $this->db->select('(sum(kredit) - sum(debit)) as modal')
-						->from('jurnal')
-						->join('akun', 'jurnal.akun = akun.id_akun')
-						->where('kategori_akun','modal')
-						->where('tb_jurnal.tanggal >=',$startDate)
-						->where('tb_jurnal.tanggal <=',$endDate)
-						->where_not_in('tb_jurnal.akun_pengeluaran')
-						->where_not_in('tb_jurnal.akun')
-
-						->get()->row()->modal ?? 0,
-			'ditahan' => ( $this->db->select('(sum(kredit) - sum(debit)) as ditahan')
-			->from('jurnal')
-			->join('akun', 'jurnal.akun = akun.id_akun')
-			->where_in('kategori_akun',['pendapatan', ])
-			->where('tb_jurnal.tanggal >=',$startDate)
-			->where('tb_jurnal.tanggal <=',$endDate)
-			->get()->row()->ditahan  - $this->db->select('(sum(debit)) as ditahan')
-						->from('jurnal')
-						->join('akun', 'jurnal.akun = akun.id_akun')
-						->where_in('kategori_akun',['beban'])
-						->where('tb_jurnal.tanggal >=',$startDate)
-						->where('tb_jurnal.tanggal <=',$endDate)
-						->get()->row()->ditahan )?? 0
+						->where_in('tb_jurnal.akun_pengeluaran', [11, 23])
+						->get()->row()->kas) + $this->data->akunTotalKredit(15, $startDate, $endDate) ?? 0,
+			'hutang' =>  $this->db->select('sum(debit) as total')->from('jurnal')->where('tb_jurnal.tanggal >= ',$startDate)
+							->where('tb_jurnal.tanggal <=',$endDate)->where('akun', 31)->where('status',0)->group_by('akun')->get()->row()->total,
+			'perlengkapan' =>  $this->db->select('sum(debit) as total')->from('jurnal')->where('tb_jurnal.tanggal >= ',$startDate)
+			->where('tb_jurnal.tanggal <=',$endDate)->where('akun', 31)->where('status',1)->group_by('akun')->get()->row()->total,
+			'modal' =>$this->data->akunTotalKredit(15, $startDate, $endDate) ?? 0,
+			'ditahan' => $this->data->labaDitahan($startDate, $endDate)?? 0
 		);
 		$data['startDate']	= $startDate;
 		$data['endDate']	= $endDate;
@@ -456,7 +480,13 @@ foreach ($hutangs as $h) {
 		
 			
 		}
-		$result = $this->data->perubahanModal($startDate,$endDate)->result();
+		// $result = $this->data->perubahanModal($startDate,$endDate)->result();
+
+			$result = [
+				'modal' => $this->data->akunTotalKredit(15, $startDate, $endDate),
+				'pendapatan' => $this->data->akunTotalKredit(12, $startDate, $endDate)+$this->data->akunTotalKredit(23, $startDate, $endDate)- $this->data->akunTotalDebit(13, $startDate, $endDate)-$this->data->akunTotalDebit(24, $startDate, $endDate),
+				'prive' => $this->data->akunTotalDebit(18, $startDate, $endDate) + $this->data->akunTotalKredit(18, $startDate, $endDate)
+			];
 
 			$data['data']	= $result;
 			$data['title'] 	= 'Laporan Perubahan Modal';

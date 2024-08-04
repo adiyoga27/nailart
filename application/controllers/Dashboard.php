@@ -458,7 +458,8 @@ class Dashboard extends CI_Controller
                 $this->db->insert('jurnal', [
                     'kode_transaksi' => $kode,
                     'user' => $this->session->userdata('kode'),
-                    'akun' => $p['akun'],
+                    'akun' => 11,
+                    'akun_pengeluaran' => $p['akun'],
                     'tanggal' => $p['tanggal_pemasukan'],
                     'debit' => 0,
                     'kredit' => $total,
@@ -466,7 +467,7 @@ class Dashboard extends CI_Controller
                 ]);
                 $this->db->insert('pemasukan', [
                     'id_pemasukan' => $kode,
-                    'akun' => $p['akun'],
+                    'akun' => 11,
                     'harga' => str_replace('.', '',$total),
                     'tanggal_pemasukan' => $p['tanggal_pemasukan'],
                     'keterangan' => $p['keterangan'],

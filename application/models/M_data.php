@@ -95,7 +95,26 @@ class M_data extends CI_Model {
 				->group_by('akun.kategori_akun')
 				->get();
 
+		// return $this->akunTotalDebit(12, $startDate, $endDate) + $this->akunTotalDebit(23, $startDate, $endDate) - $this->akunTotalDebit(13, $startDate, $endDate) - $this->akunTotalDebit(24, $startDate, $endDate);
+
 				
+	}
+
+	public function akunTotalDebit($id_akun, $startDate, $endDate) {
+		return $this->db->select('sum(debit) as total')->from('jurnal')->where('tb_jurnal.tanggal >= ',$startDate)
+					->where('tb_jurnal.tanggal <=',$endDate)->where('akun', $id_akun)->group_by('akun')->get()->row()->total + $this->db->select('sum(debit) as total')->from('jurnal')->where('tb_jurnal.tanggal >= ',$startDate)
+					->where('tb_jurnal.tanggal <=',$endDate)->where('akun_pengeluaran', $id_akun)->group_by('akun_pengeluaran')->get()->row()->total;
+	}
+	public function akunTotalKredit($id_akun, $startDate, $endDate) {
+		return $this->db->select('sum(kredit) as total')->from('jurnal')->where('tb_jurnal.tanggal >= ',$startDate)
+					->where('tb_jurnal.tanggal <=',$endDate)->where('akun', $id_akun)->group_by('akun')->get()->row()->total + $this->db->select('sum(kredit) as total')->from('jurnal')->where('tb_jurnal.tanggal >= ',$startDate)
+					->where('tb_jurnal.tanggal <=',$endDate)->where('akun_pengeluaran', $id_akun)->group_by('akun_pengeluaran')->get()->row()->total;
+	}
+
+	public function labaDitahan($startDate, $endDate){
+		$total = $this->data->akunTotalKredit(12, $startDate, $endDate)+$this->data->akunTotalKredit(23, $startDate, $endDate)- $this->data->akunTotalDebit(13, $startDate, $endDate)-$this->data->akunTotalDebit(24, $startDate, $endDate);
+		$total = $total - $this->data->akunTotalDebit(18, $startDate, $endDate) + $this->data->akunTotalKredit(18, $startDate, $endDate);
+		return $total;
 	}
 
 	public function produk($kode=null)

@@ -41,48 +41,50 @@
         <table class="table table-sm table-dark">
           <?php 
          
-         $modal = $pendapatan =$prive = 0;
-          foreach ($data as $row) {
+        //  $modal = $pendapatan =$prive = 0;
+          // foreach ($data as $row) {
       
-            if ($row->kategori_akun == 'modal') {
-              $modal = $row->kredit;
-            }else if($row->kategori_akun == 'pendapatan'){
-              $pendapatan = $pendapatan + $row->kredit;
-            }else if($row->kategori_akun == 'prive'){
-              $prive = $row->kredit;
-            }else if($row->kategori_akun == 'beban'){
-              $pendapatan = $pendapatan - $row->debit;
-            }else if($row->kategori_akun == 'aset'){
-              $pendapatan = $pendapatan - $row->debit;
-            }
+            // if ($row->kategori_akun == 'modal') {
+            //   $modal = $row->kredit;
+            // }else if($row->kategori_akun == 'pendapatan'){
+            //   $pendapatan = $pendapatan + $row->kredit;
+            // }else if($row->kategori_akun == 'prive'){
+            //   $prive = $row->kredit;
+            // }else if($row->kategori_akun == 'beban'){
+            //   $pendapatan = $pendapatan - $row->debit;
+            // }else if($row->kategori_akun == 'aset'){
+            //   $pendapatan = $pendapatan - $row->debit;
+            // }
             ?>
-          <?php } ?>
+          <?php 
+        // }
+         ?>
 
               <tr>
                 <td>Modal Awal</td>
                 <td></td>
-                <td>Rp<?php echo (number_format($modal,0,',','.') ) ?></td>
+                <td>Rp<?php echo (number_format($data['modal'],0,',','.') ) ?></td>
               </tr>
               <tr>
                 <td>Laba Bersih</td>
-                <td>Rp<?php echo ( number_format($pendapatan,0,',','.')) ?></td>
+                <td>Rp<?php echo ( number_format($data['pendapatan'],0,',','.')) ?></td>
                 <td></td>
               </tr>
               <tr>
                 <td>Prive</td>
-                <td>Rp<?php echo (number_format($prive,0,',','.') ) ?></td>
+                <td>Rp<?php echo (number_format($data['prive'],0,',','.') ) ?></td>
                 <td></td>
               </tr>
               <tr>
                 <td>Penambahan Modal</td>
                 <td></td>
-                <td>Rp<?php echo (number_format($pendapatan-$prive,0,',','.'));?></td>
+                <td>Rp<?php echo (number_format($data['pendapatan']-$data['prive'],0,',','.'));?></td>
               </tr>
 
 
               <tr style="background-color:darkgrey !important; ; font-weight:bold">
                 <td class="table-dark" colspan="2">Modal Akhir </td>
-                <td class="table-dark" colspan="2">Rp<?php echo (number_format($modal + ($pendapatan-$prive),0,',','.'));?></td>
+                <td class="table-dark" colspan="2">Rp<?php echo (number_format($data['modal'] + ($data['pendapatan']-$data['prive']),0,',','.'));?></td>
               </tr>
             </table>
         </div>

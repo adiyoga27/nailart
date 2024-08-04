@@ -26,6 +26,16 @@ class Dashboard extends CI_Controller
         if ( function_exists( 'date_default_timezone_set' ) ) {
             date_default_timezone_set('Asia/Makassar');
         }
+        $pbi = $this->data->akunTotalKredit(12, date('Y-m-01'), date('Y-m-d'));
+        $plbi = $this->data->akunTotalKredit(23, date('Y-m-01'), date('Y-m-d'));
+        $pengeluaranBI = $this->data->akunTotalDebit(13, date('Y-m-01'), date('Y-m-d')) - $this->data->akunTotalDebit(24, date('Y-m-01'), date('Y-m-d'));
+        
+        $data['data'] = array(
+            'pemasukan_bulan_ini' => $pbi,
+            'pemasukan_lainnya_bulan_ini' => $plbi,
+            'pengeluaran_bulan_ini' => $pengeluaranBI,
+            'saldo' => ($pbi+$plbi)+$pengeluaranBI,
+        );
         $data['grafik'] = $this->data->grafik();
         $data['title'] = 'Dashboard';
         $data['side'] = 'dashboard';

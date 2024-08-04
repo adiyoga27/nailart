@@ -10,7 +10,7 @@ if ( function_exists( 'date_default_timezone_set' ) ) {
     <section class="col-lg-6 connectedSortable">
       <div class="box box-danger">
         <div class="box-body text-center">
-          <h3>Pemasukan Bulan Ini<br> <b>Rp<?=number_format($this->db->query(" SELECT SUM(kredit) as kredit_ FROM tb_jurnal INNER JOIN tb_akun on tb_akun.id_akun = tb_jurnal.akun where month(tanggal) = '".date('m')."' and year(tanggal) = '".date('Y')."' and tb_akun.kode_akun = 401  ")->row()->kredit_,0, ",",".");?> </b></h3>
+          <h3>Pemasukan Bulan Ini<br> <b>Rp<?=number_format($data['pemasukan_bulan_ini'],0, ",",".");?> </b></h3>
           
         </div>
       </div>
@@ -18,16 +18,7 @@ if ( function_exists( 'date_default_timezone_set' ) ) {
     <section class="col-lg-6 connectedSortable">
       <div class="box box-danger">
         <div class="box-body text-center">
-          <h3>Pemasukan Lainnya Bulan Ini<br> <b>Rp<?=number_format($this->db->query(" SELECT SUM(kredit) as kredit_ FROM tb_jurnal INNER JOIN tb_akun on tb_akun.id_akun = tb_jurnal.akun where month(tanggal) = '".date('m')."' and year(tanggal) = '".date('Y')."' and tb_akun.kode_akun = 402 ")->row()->kredit_,0, ",",".");?> </b></h3>
-          
-        </div>
-      </div>
-    </section>
-
-    <section class="col-lg-6 connectedSortable">
-      <div class="box box-danger">
-        <div class="box-body text-center">
-          <h3>Pengeluaran Bulan Ini<br> <b>Rp<?=number_format($this->db->query(" SELECT SUM(debit) as debit_ FROM tb_jurnal INNER JOIN tb_akun on tb_akun.id_akun = tb_jurnal.akun where month(tanggal) = '".date('m')."' and year(tanggal) = '".date('Y')."' and tb_akun.kategori_akun in ('beban') ")->row()->debit_,0, ",",".");?> </b> </h3>
+          <h3>Pemasukan Lainnya Bulan Ini<br> <b>Rp<?=number_format($data['pemasukan_lainnya_bulan_ini'],0, ",",".");?> </b></h3>
           
         </div>
       </div>
@@ -36,7 +27,16 @@ if ( function_exists( 'date_default_timezone_set' ) ) {
     <section class="col-lg-6 connectedSortable">
       <div class="box box-danger">
         <div class="box-body text-center">
-          <h3>Saldo Bulan Ini<br> <b>Rp<?=number_format($this->db->query(" SELECT SUM(kredit) - SUM(debit) as totals_ FROM tb_jurnal INNER JOIN tb_akun on tb_akun.id_akun = tb_jurnal.akun where month(tanggal) = '".date('m')."' and year(tanggal) = '".date('Y')."' and tb_akun.kategori_akun in ('beban','pendapatan') ")->row()->totals_,0, ",",".");?> </b> </h3>
+          <h3>Pengeluaran Bulan Ini<br> <b>Rp<?=number_format($data['pengeluaran_bulan_ini'] * -1,0, ",",".");?> </b> </h3>
+          
+        </div>
+      </div>
+    </section>
+
+    <section class="col-lg-6 connectedSortable">
+      <div class="box box-danger">
+        <div class="box-body text-center">
+          <h3>Saldo Bulan Ini<br> <b>Rp<?=number_format($data['saldo'],0, ",",".");?> </b> </h3>
           
         </div>
       </div>
